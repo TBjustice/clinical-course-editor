@@ -5,12 +5,12 @@ import {
 } from '@lumel/react-sortable-hoc';
 import React from 'react';
 
-interface CCGraphItemProp {
+type CCGraphItemProp = {
   uuid: string,
   name: string
 }
 
-export default function CCGraphList({ items, activeId, dispatch }: { items: CCGraphItemProp[], activeId: string, dispatch: CallableFunction }) {
+export default function CCGraphListview({ items, activeUuid, dispatch }: { items: CCGraphItemProp[], activeUuid: string, dispatch: CallableFunction }) {
 
   const DragHandle = SortableHandle(React.forwardRef(({ }, ref: React.Ref<SVGSVGElement> | undefined) => (
     <svg ref={ref} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='20' height='20' className='drag-handle'>
@@ -32,11 +32,11 @@ export default function CCGraphList({ items, activeId, dispatch }: { items: CCGr
     )),
   );
 
-  const ListContainer = SortableContainer<{ items: CCGraphItemProp[], activeId: String, dispatch: CallableFunction }>(
+  const ListContainer = SortableContainer<{ items: CCGraphItemProp[], activeUuid: String, dispatch: CallableFunction }>(
     React.forwardRef(({ items }: { items: CCGraphItemProp[] }, ref: React.Ref<HTMLUListElement> | undefined) => (
       <ul ref={ref} className='ccgraph-list'>
         {items.map((value, index) => (
-          <ListItem key={value.uuid} index={index} isActive={value.uuid == activeId} value={value} dispatch={dispatch} />
+          <ListItem key={value.uuid} index={index} isActive={value.uuid == activeUuid} value={value} dispatch={dispatch} />
         ))}
       </ul>
     )),
@@ -45,8 +45,7 @@ export default function CCGraphList({ items, activeId, dispatch }: { items: CCGr
   const onSortEnd = (
     { oldIndex, newIndex }: { oldIndex: number, newIndex: number }) => {
     dispatch({ type: 'LIST_MOVE_ITEM', payload: { oldIndex, newIndex } });
-    //setItems(arrayMoveImmutable(items, oldIndex, newIndex));
   };
 
-  return <ListContainer items={items} activeId={activeId} dispatch={dispatch} onSortEnd={onSortEnd} useDragHandle />;
+  return <ListContainer items={items} activeUuid={activeUuid} dispatch={dispatch} onSortEnd={onSortEnd} useDragHandle />;
 };

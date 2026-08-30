@@ -1,16 +1,17 @@
 import { useReducer } from 'react';
 import './App.css'
-import CCGraphList from './CCGraphList.tsx'
+import CCGraphListview from './CCGraphListview.tsx'
+import CCGraphEditor from './CCGraphEditor.tsx'
 import { arrayMoveImmutable } from 'array-move';
 
 interface AppState {
-  dataOrder: string[];
-  activeId: string;
+  ccgraphOrder: string[];
+  activeUuid: string;
 }
 
 const initialState: AppState = {
-  dataOrder: [],
-  activeId: ""
+  ccgraphOrder: [],
+  activeUuid: ""
 };
 
 type AppStateAction =
@@ -22,11 +23,11 @@ type AppStateAction =
 function AppStateReducer(state: AppState, action: AppStateAction){
   switch (action.type) {
     case 'ADD_ITEM':
-      return { ...state, dataOrder: [...state.dataOrder, action.payload.uuid]};
+      return { ...state, ccgraphOrder: [...state.ccgraphOrder, action.payload.uuid]};
     case 'SELECT_ITEM':
-      return { ...state, activeId: action.payload };
+      return { ...state, activeUuid: action.payload };
     case 'LIST_MOVE_ITEM':
-      return {...state, dataOrder: arrayMoveImmutable(state.dataOrder, action.payload.oldIndex, action.payload.newIndex)};
+      return {...state, ccgraphOrder: arrayMoveImmutable(state.ccgraphOrder, action.payload.oldIndex, action.payload.newIndex)};
     default:
       return state;
   }
@@ -34,6 +35,7 @@ function AppStateReducer(state: AppState, action: AppStateAction){
 
 export default function App() {
   const [state, dispatch] = useReducer(AppStateReducer, initialState);
+
   function addGraph() {
     dispatch({
       type: 'ADD_ITEM',
@@ -41,7 +43,7 @@ export default function App() {
     });
   }
 
-  const CCGraphListProp = state.dataOrder.map(uuid => ({
+  const ccgraphListProp = state.ccgraphOrder.map(uuid => ({
     uuid,
     name: uuid
   }));
@@ -59,9 +61,10 @@ export default function App() {
           <button>save</button>
           <button>load</button>
         </menu>
-        <CCGraphList items={CCGraphListProp} activeId={state.activeId} dispatch={dispatch} />
+        <CCGraphListview items={ccgraphListProp} activeUuid={state.activeUuid} dispatch={dispatch} />
       </section>
       <section className='editor-pane'>
+        {state.activeUuid.length > 0 && <CCGraphEditor /> }
       </section>
       <section className='preview-pane'></section>
     </>
