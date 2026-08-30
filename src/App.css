@@ -1,0 +1,97 @@
+.list-pane {
+  width: 18rem;
+  box-shadow: 1px 0 2px black;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0.5rem;
+
+  header {
+    text-align: center;
+    padding: 1rem 0;
+
+    h1 {
+      font-size: 3rem;
+      margin: 0;
+      color: var(--primary);
+    }
+
+    p {
+      color: var(--secondary);
+    }
+  }
+
+  .line {
+    border-bottom: 2px solid var(--border);
+  }
+
+  menu {
+    margin: 0.5rem 0;
+    padding: 0;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .ccgraph-list {
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0;
+  }
+}
+
+
+li.ccgraph-list-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  height: 3rem;
+  user-select: none;
+  white-space: nowrap;
+  gap: 0.5rem;
+
+  span {
+    flex: 1;
+    overflow: hidden;
+    margin-right: 0.5rem;
+  }
+
+  svg.drag-handle {
+    cursor: ns-resize;
+  }
+
+  svg path {
+    fill: var(--text-h);
+  }
+}
+
+li.ccgraph-list-item:hover {
+  background: var(--surface1);
+}
+
+li.ccgraph-list-item.active {
+  background: var(--primary);
+
+  span {
+    color: var(--on-primary);
+  }
+
+  svg path {
+    fill: var(--on-primary);
+  }
+
+  button:hover {
+    background: var(--secondary);
+  }
+}
+
+.editor-pane {
+  flex: 2;
+  border-right: 2px solid var(--border);
+}
+
+.preview-pane {
+  flex: 3;
+}
