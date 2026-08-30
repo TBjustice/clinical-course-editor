@@ -5,4 +5,9 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react()],
   base:'/clinical-course-editor/',
+  build: {
+    license: {
+      fileName: 'ThirdPartyNotices.md' // 出力されるファイル名を指定
+    }
+  }
 })
