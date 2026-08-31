@@ -1,9 +1,9 @@
-import { useState } from "react"
+import { useState } from 'react'
 import './CCGraphEditor.css'
+import type { CCGraphItem } from './CCGraph.tsx';
 
-export default function CCGraphEditor({ uuid, dispatch }: { uuid: string, dispatch: CallableFunction }) {
+export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: string, ccgraphItem: CCGraphItem, dispatch: CallableFunction }) {
   const [isDeleteDialogOpened, setDeleteDialogOpened] = useState(false);
-  const [name, setName] = useState('Untitled Graph');
 
   function openDeleteDialog() {
     setDeleteDialogOpened(true);
@@ -16,19 +16,50 @@ export default function CCGraphEditor({ uuid, dispatch }: { uuid: string, dispat
     setDeleteDialogOpened(false);
   }
 
+  function onGraphNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+    dispatch({
+      type: 'SET_ITEM',
+      payload: {
+        uuid,
+        ccgraphItem: { ...ccgraphItem, name: event.target.value }
+      }
+    });
+  }
+
+  function onGraphTypeChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    dispatch({
+      type: 'SET_ITEM',
+      payload: {
+        uuid,
+        ccgraphItem: { ...ccgraphItem, type: event.target.value }
+      }
+    });
+  }
+
   return (
     <>
       <header className='editor-header'>
-        <input type='text' id='ccgraph-name' className='ccgraph-name' value={name} onChange={(event) => {
-          setName(event.target.value);
-        }} />
+        <input type='text' id='ccgraph-name' className='ccgraph-name' value={ccgraphItem.name} onChange={onGraphNameChange} />
         <button onClick={openDeleteDialog}>
-          <svg width={24} height={24} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-            <path d="M17 4 28 4A1 1 0 0128 6L4 6A1 1 0 014 4L15 4 15 2A1 1 0 0117 2ZM26 31 6 31 4 9A1 1 0 016 9L8 29 24 29 26 9A1 1 0 0128 9ZM9 10 10 26 12 26 11 10ZM15 10 15 26 17 26 17 10ZM21 10 20 26 22 26 23 10Z" fill="#f00" />
+          <svg width={24} height={24} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>
+            <path d='M17 4 28 4A1 1 0 0128 6L4 6A1 1 0 014 4L15 4 15 2A1 1 0 0117 2ZM26 31 6 31 4 9A1 1 0 016 9L8 29 24 29 26 9A1 1 0 0128 9ZM9 10 10 26 12 26 11 10ZM15 10 15 26 17 26 17 10ZM21 10 20 26 22 26 23 10Z' fill='#f00' />
           </svg>
         </button>
       </header>
-      <p>AAA</p>
+      <section>
+        <header>Type</header>
+        <select name='ccgraph-type' id='ccgraph-type' className='ccgraph-type' value={ccgraphItem.type} onChange={onGraphTypeChange}>
+          <option>-----</option>
+          <option value='line'>Line</option>
+          <option value='step-area'>StepArea</option>
+          <option value='timing'>Timing</option>
+        </select>
+      </section>
+      <section>
+        <header>Table</header>
+        <textarea name='ccgraph-data-table' id='ccgraph-data-table'></textarea>
+      </section>
+
       {isDeleteDialogOpened && (
         <div
           className='dialog-wrap'
