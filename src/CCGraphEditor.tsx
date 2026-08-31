@@ -46,7 +46,7 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
     });
   }
 
-  function onGraphDataChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function onGraphDataChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     dispatch({
       type: 'SET_ITEM',
       payload: {
