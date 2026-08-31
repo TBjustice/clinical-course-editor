@@ -13,9 +13,10 @@ customType = {
       type: 'table'
     }
   ],
-  renderer: function(name, graphRect, data) {
+  renderer: function(name, dateRange, yRange, data) {
     // name is a string
-    // graphRect is [x, y, width, height]
+    // dateRange is [Date, Date]
+    // yRange is [number, number]
     // data is an any-type
     const left = 20;
     const right = 10;

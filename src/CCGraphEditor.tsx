@@ -36,6 +36,26 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
     });
   }
 
+  function onGraphHeightChange(event: React.ChangeEvent<HTMLInputElement>) {
+    dispatch({
+      type: 'SET_ITEM',
+      payload: {
+        uuid,
+        ccgraphItem: { ...ccgraphItem, height: parseInt(event.target.value) }
+      }
+    });
+  }
+
+  function onGraphDataChange(event: React.ChangeEvent<HTMLInputElement>) {
+    dispatch({
+      type: 'SET_ITEM',
+      payload: {
+        uuid,
+        ccgraphItem: { ...ccgraphItem, data: event.target.value }
+      }
+    });
+  }
+
   return (
     <>
       <header className='editor-header'>
@@ -46,7 +66,7 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
           </svg>
         </button>
       </header>
-      <section>
+      <section className='ccgraph-select'>
         <header>Type</header>
         <select name='ccgraph-type' id='ccgraph-type' className='ccgraph-type' value={ccgraphItem.type} onChange={onGraphTypeChange}>
           <option>-----</option>
@@ -55,9 +75,26 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
           <option value='timing'>Timing</option>
         </select>
       </section>
-      <section>
+      <section className='ccgraph-range'>
+        <header>Height</header>
+        <div className='flexbox'>
+          <input
+            type="range" name="ccgraph-height" id="ccgraph-height" className='ccgraph-range'
+            min={5} max={200} step={1}
+            value={ccgraphItem.height}
+            onChange={onGraphHeightChange} />
+          <input
+            type="number" className='ccgraph-range'
+            value={ccgraphItem.height}
+            onChange={onGraphHeightChange} />
+        </div>
+      </section>
+      <section className='ccgraph-table'>
         <header>Table</header>
-        <textarea name='ccgraph-data-table' id='ccgraph-data-table'></textarea>
+        <textarea
+          name='ccgraph-table' id='ccgraph-table'
+          value={ccgraphItem.data}
+          onChange={onGraphDataChange}></textarea>
       </section>
 
       {isDeleteDialogOpened && (

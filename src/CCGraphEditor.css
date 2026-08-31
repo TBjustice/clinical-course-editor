@@ -27,7 +27,7 @@
   }
 
   section{
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--border);
 
     header{
@@ -42,9 +42,22 @@
       min-width: 10rem;
     }
 
+    div.flexbox{
+      display: flex;
+    }
+
+    input.ccgraph-range[type="range"]{
+      min-width: 15rem;
+    }
+
+    input.ccgraph-range[type="number"]{
+      width: 4rem;
+    }
+
     textarea{
       width:100%;
       min-height: 10rem;
+      resize: none;
     }
   }
 

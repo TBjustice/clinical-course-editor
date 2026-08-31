@@ -11,7 +11,7 @@ interface AppState {
 }
 
 const initialState: AppState = {
-  ccgraph: { uuidList: [], ccgraphItems: {} },
+  ccgraph: { uuidList: [], width: 300, ccgraphItems: {} },
   activeUuid: ""
 };
 
@@ -32,7 +32,8 @@ function AppStateReducer(state: AppState, action: AppStateAction) {
         newCCGraphItems[action.payload] = {
           name: 'Untitled Graph',
           type: '',
-          data: null
+          height: 30,
+          data: ''
         };
         return {
           ...state,
@@ -106,6 +107,11 @@ export default function App() {
     name: state.ccgraph.ccgraphItems[uuid].name
   }));
 
+  let svgPreview = '';
+  if ('CCGraphRenderer' in window && typeof window.CCGraphRenderer == 'function') {
+    svgPreview = window.CCGraphRenderer(state.ccgraph);
+  }
+
   return (
     <>
       <section className='list-pane'>
@@ -129,7 +135,9 @@ export default function App() {
             dispatch={dispatch} />
         )}
       </section>
-      <section className='preview-pane'></section>
+      <section className='preview-pane'>
+        <div dangerouslySetInnerHTML={{__html: svgPreview}}></div>
+      </section>
     </>
   )
 };
