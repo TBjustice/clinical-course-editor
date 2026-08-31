@@ -19,15 +19,30 @@ type AppStateAction =
   | { type: 'SELECT_ITEM'; payload: string }
   | { type: 'LIST_MOVE_ITEM'; payload: { oldIndex: number; newIndex: number } }
   | { type: 'DELETE_DATA'; payload: string };
-  
-function AppStateReducer(state: AppState, action: AppStateAction){
+
+function AppStateReducer(state: AppState, action: AppStateAction) {
   switch (action.type) {
     case 'ADD_ITEM':
-      return { ...state, ccgraphOrder: [...state.ccgraphOrder, action.payload.uuid]};
+      return {
+        ...state,
+        ccgraphOrder: [...state.ccgraphOrder, action.payload.uuid]
+      };
     case 'SELECT_ITEM':
-      return { ...state, activeUuid: action.payload };
+      return {
+        ...state,
+        activeUuid: action.payload
+      };
     case 'LIST_MOVE_ITEM':
-      return {...state, ccgraphOrder: arrayMoveImmutable(state.ccgraphOrder, action.payload.oldIndex, action.payload.newIndex)};
+      return {
+        ...state,
+        ccgraphOrder: arrayMoveImmutable(state.ccgraphOrder, action.payload.oldIndex, action.payload.newIndex)
+      };
+    case 'DELETE_DATA':
+      return {
+        ...state,
+        activeUuid: (state.activeUuid === action.payload ? "" : state.activeUuid),
+        ccgraphOrder: state.ccgraphOrder.filter(item => item !== action.payload)
+      };
     default:
       return state;
   }
@@ -39,7 +54,7 @@ export default function App() {
   function addGraph() {
     dispatch({
       type: 'ADD_ITEM',
-      payload: {uuid:crypto.randomUUID(), data:""}
+      payload: { uuid: crypto.randomUUID(), data: "" }
     });
   }
 
@@ -64,7 +79,7 @@ export default function App() {
         <CCGraphListview items={ccgraphListProp} activeUuid={state.activeUuid} dispatch={dispatch} />
       </section>
       <section className='editor-pane'>
-        {state.activeUuid.length > 0 && <CCGraphEditor /> }
+        {state.activeUuid.length > 0 && <CCGraphEditor uuid={state.activeUuid} dispatch={dispatch} />}
       </section>
       <section className='preview-pane'></section>
     </>

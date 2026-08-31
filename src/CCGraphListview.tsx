@@ -4,6 +4,7 @@ import {
   SortableHandle,
 } from '@lumel/react-sortable-hoc';
 import React from 'react';
+import './CCGraphListview.css'
 
 type CCGraphItemProp = {
   uuid: string,
