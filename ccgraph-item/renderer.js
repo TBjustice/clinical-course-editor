@@ -28,7 +28,7 @@ function CCGraphRenderer(data) {
     });
     return `
   <svg version="1.1"
-    viewBox="0 0 ${width} ${y}"
+    viewBox="-30 0 ${width + 30} ${y}"
     xmlns="http://www.w3.org/2000/svg">
     ${inner}
   </svg>
@@ -78,13 +78,21 @@ function lineRenderer(yRange, table) {
     const y = table[col].map((value) => { return parseFloat(value); });
     const yMax = Math.max(...y);
     const yMin = Math.min(...y);
-    const scale = (yRange[1] - yRange[0]) / (yMax - yMin + 0.01);
+    const niceBounds = calculateNiceBounds(yMin, yMax);
+    console.log(yMin, ",", yMax, ",", niceBounds);
+    
+    const scale = (yRange[1] - yRange[0]) / (niceBounds.max - niceBounds.min);
     for (let i = 0; i < x.length; ++i) {
       if (typeof x[i] != 'number' || !Number.isFinite(x[i])) continue;
       if (typeof y[i] != 'number' || !Number.isFinite(y[i])) continue;
-      text += `${x[i]},${yRange[1] - (y[i] - yMin) * scale} `;
+      text += `${x[i]},${yRange[1] - (y[i] - niceBounds.min) * scale} `;
     }
     text += `" stroke="${ColorTable[(col - 1) % ColorTable.length]}" fill="none"/>`
+
+    text += `<text text-anchor="end" dominant-baseline="middle" font-size="4" x="${-(col-1)*12 - 2}" y="${yRange[1]}">${String(niceBounds.min)}</text>`;
+    text += `<text text-anchor="end" dominant-baseline="middle" font-size="4" x="${-(col-1)*12 - 2}" y="${yRange[0]}">${String(niceBounds.max)}</text>`;
+    text += `<line x1="${-(col-1)*12}" y1="${yRange[0]}" x2="${-(col-1)*12}" y2="${yRange[1]}" stroke="black" stroke-width="0.5"/>`
+
     result += text + '\n';
   }
   return result;
@@ -105,4 +113,24 @@ function stepAreaRenderer(yRange, table) {
     result += `<rect x="${x[i]}" y="${yRange[1] - y[i] * scale}" width="${width + 1}" height="${y[i] * scale}" fill="rgb(157, 218, 157)" />`;
   }
   return result;
+}
+
+function calculateNiceBounds(minVal, maxVal, tickCount = 5) {
+    if (minVal === maxVal) return { min: minVal - 1, max: maxVal + 1, step: 1 };
+
+    const roughStep = (maxVal - minVal) / (tickCount - 1);
+    const stepPower = Math.floor(Math.log10(roughStep));
+    const fraction = roughStep / Math.pow(10, stepPower);
+
+    let niceFraction;
+    if (fraction <= 1.5) niceFraction = 1;
+    else if (fraction <= 3) niceFraction = 2;
+    else if (fraction <= 7) niceFraction = 5;
+    else niceFraction = 10;
+
+    const niceStep = niceFraction * Math.pow(10, stepPower);
+    const niceMin = Math.floor(minVal / niceStep) * niceStep;
+    const niceMax = Math.ceil(maxVal / niceStep) * niceStep;
+
+    return { min: niceMin, max: niceMax, step: niceStep };
 }
