@@ -91,7 +91,7 @@ function lineRenderer(yRange, table) {
 
     text += `<text text-anchor="end" dominant-baseline="middle" font-size="4" x="${-(col-1)*12 - 2}" y="${yRange[1]}">${String(niceBounds.min)}</text>`;
     text += `<text text-anchor="end" dominant-baseline="middle" font-size="4" x="${-(col-1)*12 - 2}" y="${yRange[0]}">${String(niceBounds.max)}</text>`;
-    text += `<line x1="${-(col-1)*12}" y1="${yRange[0]}" x2="${-(col-1)*12}" y2="${yRange[1]}" stroke="black" stroke-width="0.5"/>`
+    text += `<line x1="${-(col-1)*12}" y1="${yRange[0]}" x2="${-(col-1)*12}" y2="${yRange[1]}" stroke="${ColorTable[(col - 1) % ColorTable.length]}" stroke-width="0.5"/>`
 
     result += text + '\n';
   }
