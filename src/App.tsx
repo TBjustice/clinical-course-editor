@@ -10,10 +10,22 @@ interface AppState {
   activeUuid: string;
 }
 
+/*
 const initialState: AppState = {
   ccgraph: { uuidList: [], width: 300, ccgraphItems: {} },
   activeUuid: ""
 };
+*/
+
+function loadCCGraph() {
+  try {
+    const item = window.localStorage.getItem('ccedit-appstate');
+    return item ? (JSON.parse(item) as CCGraph) : { uuidList: [], width: 300, ccgraphItems: {} };
+  }
+  catch (error) {
+    return { uuidList: [], width: 300, ccgraphItems: {} };
+  }
+}
 
 type AppStateAction =
   | { type: 'ADD_ITEM'; payload: string }
@@ -93,8 +105,12 @@ function AppStateReducer(state: AppState, action: AppStateAction) {
 }
 
 export default function App() {
-  const [state, dispatch] = useReducer(AppStateReducer, initialState);
+  const [state, dispatch] = useReducer(AppStateReducer, { ccgraph: loadCCGraph(), activeUuid: "" });
 
+  window.addEventListener('beforeunload', () => {
+    window.localStorage.setItem('ccedit-appstate', JSON.stringify(state.ccgraph));
+  });
+  
   function addGraph() {
     dispatch({
       type: 'ADD_ITEM',
@@ -136,7 +152,7 @@ export default function App() {
         )}
       </section>
       <section className='preview-pane'>
-        <div dangerouslySetInnerHTML={{__html: svgPreview}}></div>
+        <div dangerouslySetInnerHTML={{ __html: svgPreview }}></div>
       </section>
     </>
   )
