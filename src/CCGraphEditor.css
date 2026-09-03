@@ -99,7 +99,7 @@
 
         button {
           background-color: transparent;
-          color: var(--primary);
+          color: var(--accent);
           font-weight: bold;
           font-size: 1rem;
           border: none;

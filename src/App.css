@@ -1,6 +1,6 @@
 .list-pane {
-  width: 18rem;
-  box-shadow: 1px 0 2px black;
+  width: 15rem;
+  box-shadow: 1px 0 3px var(--accent);
   display: flex;
   flex-direction: column;
   padding: 0 0.5rem;
@@ -17,4 +17,7 @@
 
 .preview-pane {
   flex: 3;
+  svg{
+    background-color: white;
+  }
 }
