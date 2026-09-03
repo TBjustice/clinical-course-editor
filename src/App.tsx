@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useLayoutEffect, useReducer, useRef, useState } from 'react';
 import './App.css'
 import type { CCGraph, CCGraphItem } from './CCGraph.tsx';
 import CCGraphListview from './CCGraphListview.tsx'
@@ -13,7 +13,7 @@ interface AppState {
 /*
 const initialState: AppState = {
   ccgraph: { uuidList: [], width: 300, ccgraphItems: {} },
-  activeUuid: ""
+  activeUuid: ''
 };
 */
 
@@ -77,7 +77,7 @@ function AppStateReducer(state: AppState, action: AppStateAction) {
         delete newCCGraphItems[action.payload];
         return {
           ...state,
-          activeUuid: (state.activeUuid === action.payload ? "" : state.activeUuid),
+          activeUuid: (state.activeUuid === action.payload ? '' : state.activeUuid),
           ccgraph: {
             ...state.ccgraph,
             uuidList: state.ccgraph.uuidList.filter(item => item !== action.payload),
@@ -104,13 +104,42 @@ function AppStateReducer(state: AppState, action: AppStateAction) {
   }
 }
 
+function RenderSVG({ ccgraph }: { ccgraph: CCGraph }) {
+  const ref = useRef<SVGGElement>(null);
+  const [viewBox, setViewBox] = useState("0 0 0 0");
+
+  useLayoutEffect(() => {
+    if (ref.current) {
+      try {
+        const bbox = ref.current.getBBox();
+        if (bbox.width > 0 && bbox.height > 0) {
+          setViewBox(`${bbox.x - 2} ${bbox.y - 2} ${bbox.width + 4} ${bbox.height + 4}`);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, [ccgraph]);
+
+  let svgPreview = '';
+  if ('CCGraphRenderer' in window && typeof window.CCGraphRenderer == 'function') {
+    svgPreview = window.CCGraphRenderer(ccgraph);
+  }
+
+  return (
+    <svg version='1.1' xmlns='http://www.w3.org/2000/svg' viewBox={viewBox}>
+      <g ref={ref} dangerouslySetInnerHTML={{ __html: svgPreview }}></g>
+    </svg>
+  )
+}
+
 export default function App() {
-  const [state, dispatch] = useReducer(AppStateReducer, { ccgraph: loadCCGraph(), activeUuid: "" });
+  const [state, dispatch] = useReducer(AppStateReducer, { ccgraph: loadCCGraph(), activeUuid: '' });
 
   window.addEventListener('beforeunload', () => {
     window.localStorage.setItem('ccedit-appstate', JSON.stringify(state.ccgraph));
   });
-  
+
   function addGraph() {
     dispatch({
       type: 'ADD_ITEM',
@@ -123,17 +152,12 @@ export default function App() {
     name: state.ccgraph.ccgraphItems[uuid].name
   }));
 
-  let svgPreview = '';
-  if ('CCGraphRenderer' in window && typeof window.CCGraphRenderer == 'function') {
-    svgPreview = window.CCGraphRenderer(state.ccgraph);
-  }
-
   return (
     <>
       <section className='list-pane'>
         <header>
-          <h1>CCEditor</h1>
-          <p>OSS clinical cource editor</p>
+          <h1>CliCPlot</h1>
+          <h2>clinical cource editor</h2>
         </header>
         <div className='line'></div>
         <menu>
@@ -152,8 +176,12 @@ export default function App() {
         )}
       </section>
       <section className='preview-pane'>
-        <div dangerouslySetInnerHTML={{ __html: svgPreview }}></div>
+        <RenderSVG ccgraph={state.ccgraph}></RenderSVG>
       </section>
     </>
   )
 };
+
+/*
+        <div dangerouslySetInnerHTML={{ __html: svgPreview }}></div>
+*/

@@ -1,16 +1,31 @@
 customType = {
+  name: 'Step Area',
   parameter: [
     {
-      name: 'line width',
-      type: 'number'
+      name: 'stroke',
+      type: 'group',
+      child: [
+        {
+          name: 'stroke color',
+          type: 'color'
+        },
+        {
+          name: 'stroke width',
+          type: 'number'
+        },
+        {
+          name: 'dash-array',
+          type: 'string'
+        }
+      ]
     },
     {
-      name: 'line color',
+      name: 'fill',
       type: 'color'
     },
     {
       name: 'data',
-      type: 'table'
+      type: 'timetable'
     }
   ],
   renderer: function(name, dateRange, yRange, data) {

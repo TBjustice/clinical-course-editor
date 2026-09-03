@@ -26,15 +26,9 @@ function CCGraphRenderer(data) {
       }
       y += height + 5;
     });
-    return `
-  <svg version="1.1"
-    viewBox="-30 0 ${width + 30} ${y}"
-    xmlns="http://www.w3.org/2000/svg">
-    ${inner}
-  </svg>
-  `;
+    return inner;
   }
-  catch(e) {
+  catch (e) {
     console.log(e);
   }
 }
@@ -60,6 +54,12 @@ function createTable(data) {
 
 function lineRenderer(yRange, table) {
   if (table.length <= 1) return "";
+  const DashArrayTable = [
+    '',
+    '3 1',
+    '1 3',
+    '3 1 1 1'
+  ]
   const ColorTable = ['#1f77b4',
     '#ff7f0e',
     '#2ca02c',
@@ -76,22 +76,25 @@ function lineRenderer(yRange, table) {
   for (let col = 1; col < table.length; ++col) {
     let text = `<polyline points="`;
     const y = table[col].map((value) => { return parseFloat(value); });
-    const yMax = Math.max(...y);
-    const yMin = Math.min(...y);
+    const validY = y.filter((value => { return isFinite(value) }));
+    const yMax = Math.max(...validY);
+    const yMin = Math.min(...validY);
     const niceBounds = calculateNiceBounds(yMin, yMax);
-    console.log(yMin, ",", yMax, ",", niceBounds);
-    
+
     const scale = (yRange[1] - yRange[0]) / (niceBounds.max - niceBounds.min);
     for (let i = 0; i < x.length; ++i) {
       if (typeof x[i] != 'number' || !Number.isFinite(x[i])) continue;
       if (typeof y[i] != 'number' || !Number.isFinite(y[i])) continue;
       text += `${x[i]},${yRange[1] - (y[i] - niceBounds.min) * scale} `;
     }
-    text += `" stroke="${ColorTable[(col - 1) % ColorTable.length]}" fill="none"/>`
+    text += `" stroke="${ColorTable[Math.min(col - 1, ColorTable.length - 1)]}" stroke-dasharray="${DashArrayTable[Math.min(col - 1, DashArrayTable.length - 1)]}" fill="none"/>`
 
-    text += `<text text-anchor="end" dominant-baseline="middle" font-size="4" x="${-(col-1)*12 - 2}" y="${yRange[1]}">${String(niceBounds.min)}</text>`;
-    text += `<text text-anchor="end" dominant-baseline="middle" font-size="4" x="${-(col-1)*12 - 2}" y="${yRange[0]}">${String(niceBounds.max)}</text>`;
-    text += `<line x1="${-(col-1)*12}" y1="${yRange[0]}" x2="${-(col-1)*12}" y2="${yRange[1]}" stroke="${ColorTable[(col - 1) % ColorTable.length]}" stroke-width="0.5"/>`
+    text += `<text text-anchor="end" dominant-baseline="middle" font-size="4" x="${-(col - 1) * 12 - 2}" y="${yRange[1]}">${String(niceBounds.min)}</text>`;
+    text += `<text text-anchor="end" dominant-baseline="middle" font-size="4" x="${-(col - 1) * 12 - 2}" y="${yRange[0]}">${String(niceBounds.max)}</text>`;
+    text += `<text text-anchor="middle" dominant-baseline="text-bottom" font-size="6" x="${-(col - 1) * 12 - 2}" y="${(yRange[0] + yRange[1]) * 0.5}" transform="rotate(-90, ${-(col - 1) * 12 - 2}, ${(yRange[0] + yRange[1]) * 0.5})">Label</text>`;
+    text += `<line x1="${-(col - 1) * 12}" y1="${yRange[0]}" x2="${-(col - 1) * 12}" y2="${yRange[1]}" stroke="${ColorTable[(col - 1) % ColorTable.length]}" stroke-width="0.5"/>`
+    text += `<line x1="${-(col - 1) * 12}" y1="${yRange[0]}" x2="${-(col - 1) * 12 - 2}" y2="${yRange[0]}" stroke="${ColorTable[(col - 1) % ColorTable.length]}" stroke-width="0.5"/>`
+    text += `<line x1="${-(col - 1) * 12}" y1="${yRange[1]}" x2="${-(col - 1) * 12 - 2}" y2="${yRange[1]}" stroke="${ColorTable[(col - 1) % ColorTable.length]}" stroke-width="0.5"/>`
 
     result += text + '\n';
   }
@@ -103,7 +106,8 @@ function stepAreaRenderer(yRange, table) {
   let result = "";
   const x = table[0].map((value) => { return parseFloat(value); });
   const y = table[1].map((value) => { return parseFloat(value); });
-  const yMax = Math.max(...y);
+  const validY = y.filter((value => { return isFinite(value) }));
+  const yMax = Math.max(...validY);
   const scale = (yRange[1] - yRange[0]) / (yMax + 0.01);
   for (let i = 0; i < x.length; ++i) {
     if (typeof x[i] != 'number' || !Number.isFinite(x[i])) continue;
@@ -116,21 +120,21 @@ function stepAreaRenderer(yRange, table) {
 }
 
 function calculateNiceBounds(minVal, maxVal, tickCount = 5) {
-    if (minVal === maxVal) return { min: minVal - 1, max: maxVal + 1, step: 1 };
+  if (minVal === maxVal) return { min: minVal - 1, max: maxVal + 1, step: 1 };
 
-    const roughStep = (maxVal - minVal) / (tickCount - 1);
-    const stepPower = Math.floor(Math.log10(roughStep));
-    const fraction = roughStep / Math.pow(10, stepPower);
+  const roughStep = (maxVal - minVal) / (tickCount - 1);
+  const stepPower = Math.floor(Math.log10(roughStep));
+  const fraction = roughStep / Math.pow(10, stepPower);
 
-    let niceFraction;
-    if (fraction <= 1.5) niceFraction = 1;
-    else if (fraction <= 3) niceFraction = 2;
-    else if (fraction <= 7) niceFraction = 5;
-    else niceFraction = 10;
+  let niceFraction;
+  if (fraction <= 1.5) niceFraction = 1;
+  else if (fraction <= 3) niceFraction = 2;
+  else if (fraction <= 7) niceFraction = 5;
+  else niceFraction = 10;
 
-    const niceStep = niceFraction * Math.pow(10, stepPower);
-    const niceMin = Math.floor(minVal / niceStep) * niceStep;
-    const niceMax = Math.ceil(maxVal / niceStep) * niceStep;
+  const niceStep = niceFraction * Math.pow(10, stepPower);
+  const niceMin = Math.floor(minVal / niceStep) * niceStep;
+  const niceMax = Math.ceil(maxVal / niceStep) * niceStep;
 
-    return { min: niceMin, max: niceMax, step: niceStep };
+  return { min: niceMin, max: niceMax, step: niceStep };
 }
