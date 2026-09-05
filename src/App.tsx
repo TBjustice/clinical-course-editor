@@ -1,9 +1,12 @@
+import * as z from "zod";
 import { useLayoutEffect, useReducer, useRef, useState } from 'react';
 import './App.css'
 import type { CCGraph, CCGraphItem } from './CCGraph.tsx';
 import CCGraphListview from './CCGraphListview.tsx'
 import CCGraphEditor from './CCGraphEditor.tsx'
 import { arrayMoveImmutable } from 'array-move';
+import { TvgToSvg } from './tiny-vector-graphics/TvgToSvg.tsx';
+import { TvgElementSchema, type TvgElement } from "./tiny-vector-graphics/TvgType.ts";
 
 interface AppState {
   ccgraph: CCGraph;
@@ -121,14 +124,19 @@ function RenderSVG({ ccgraph }: { ccgraph: CCGraph }) {
     }
   }, [ccgraph]);
 
-  let svgPreview = '';
-  if ('CCGraphRenderer' in window && typeof window.CCGraphRenderer == 'function') {
-    svgPreview = window.CCGraphRenderer(ccgraph);
+  let tvg: TvgElement[] = [];
+  if ('CCGraphRendererTvg' in window && typeof window.CCGraphRendererTvg == 'function') {
+    const parsed = z.array(TvgElementSchema).safeParse(window.CCGraphRendererTvg(ccgraph));
+    if (parsed.success) {
+      tvg = parsed.data;
+    }
   }
 
   return (
-    <svg version='1.1' xmlns='http://www.w3.org/2000/svg' viewBox={viewBox}>
-      <g ref={ref} dangerouslySetInnerHTML={{ __html: svgPreview }}></g>
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox={viewBox}>
+      <g ref={ref}>
+        <TvgToSvg tvg={tvg} />
+      </g>
     </svg>
   )
 }
