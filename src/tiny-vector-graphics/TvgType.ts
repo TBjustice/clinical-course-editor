@@ -15,14 +15,21 @@ const FillSchema = z.object({
 
 export type Fill = z.infer<typeof FillSchema>;
 
-const FontStyleSchema = z.object({
+const FontSchema = z.object({
   family: z.string().optional(),
   size: z.number().optional(),
-  align: z.enum(['start', 'end', 'middle']).optional(),
+  weight: z.int().min(1).max(1000).optional(),
+  style: z.enum(['normal', 'italic', 'oblique']).optional()
+});
+
+export type Font = z.infer<typeof FontSchema>;
+
+const TextPlacementSchema = z.object({
+  anchor: z.enum(['start', 'end', 'middle']).optional(),
   baseline: z.enum(['hanging', 'middle', 'alphabetic', 'ideographic']).optional()
 });
 
-export type FontStyle = z.infer<typeof FontStyleSchema>;
+export type TextPlacement = z.infer<typeof TextPlacementSchema>;
 
 const TransformSchema = z.array(z.number()).length(6);
 
@@ -81,7 +88,8 @@ const TextSchema = z.object({
   x: z.number(),
   y: z.number(),
   text: z.string(),
-  fontStyle: FontStyleSchema.optional(),
+  font: FontSchema.optional(),
+  placement: TextPlacementSchema.optional(),
   stroke: StrokeSchema.optional(),
   fill: FillSchema.optional(),
   transform: TransformSchema.optional()

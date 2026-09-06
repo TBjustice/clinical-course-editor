@@ -1,12 +1,18 @@
-import * as z from "zod";
-import { useLayoutEffect, useReducer, useRef, useState } from 'react';
+import * as z from 'zod';
+import { useReducer, useState } from 'react';
 import './App.css'
 import type { CCGraph, CCGraphItem } from './CCGraph.tsx';
 import CCGraphListview from './CCGraphListview.tsx'
 import CCGraphEditor from './CCGraphEditor.tsx'
 import { arrayMoveImmutable } from 'array-move';
 import { TvgToSvg } from './tiny-vector-graphics/TvgToSvg.tsx';
-import { TvgElementSchema, type TvgElement } from "./tiny-vector-graphics/TvgType.ts";
+import { TvgElementSchema, type TvgElement } from './tiny-vector-graphics/TvgType.ts';
+import logo from './assets/logo.svg';
+import SvgFitContent from './scripts/SvgFitContent.tsx';
+import 'material-icons/iconfont/material-icons.css';
+/*
+import JSONCrush from 'jsoncrush';
+*/
 
 interface AppState {
   ccgraph: CCGraph;
@@ -28,6 +34,20 @@ function loadCCGraph() {
   catch (error) {
     return { uuidList: [], width: 300, ccgraphItems: {} };
   }
+}
+
+function saveGraphAsFile(graph: CCGraph, filename: string) {
+  const text = JSON.stringify(graph);
+  const blob = new Blob([text], { type: 'text/plain' });
+  const fileUrl = URL.createObjectURL(blob);
+  const element = document.createElement('a');
+  element.setAttribute('href', fileUrl);
+  element.setAttribute('download', filename);
+  element.style.display = 'none';
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+  URL.revokeObjectURL(fileUrl);
 }
 
 type AppStateAction =
@@ -52,6 +72,7 @@ function AppStateReducer(state: AppState, action: AppStateAction) {
         };
         return {
           ...state,
+          activeUuid: action.payload,
           ccgraph: {
             ...state.ccgraph,
             uuidList: [...state.ccgraph.uuidList, action.payload],
@@ -108,22 +129,6 @@ function AppStateReducer(state: AppState, action: AppStateAction) {
 }
 
 function RenderSVG({ ccgraph }: { ccgraph: CCGraph }) {
-  const ref = useRef<SVGGElement>(null);
-  const [viewBox, setViewBox] = useState("0 0 0 0");
-
-  useLayoutEffect(() => {
-    if (ref.current) {
-      try {
-        const bbox = ref.current.getBBox();
-        if (bbox.width > 0 && bbox.height > 0) {
-          setViewBox(`${bbox.x - 2} ${bbox.y - 2} ${bbox.width + 4} ${bbox.height + 4}`);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }, [ccgraph]);
-
   let tvg: TvgElement[] = [];
   if ('CCGraphRendererTvg' in window && typeof window.CCGraphRendererTvg == 'function') {
     const parsed = z.array(TvgElementSchema).safeParse(window.CCGraphRendererTvg(ccgraph));
@@ -133,16 +138,15 @@ function RenderSVG({ ccgraph }: { ccgraph: CCGraph }) {
   }
 
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' viewBox={viewBox}>
-      <g ref={ref}>
-        <TvgToSvg tvg={tvg} />
-      </g>
-    </svg>
+    <SvgFitContent padding={2}>
+      <TvgToSvg tvg={tvg} />
+    </SvgFitContent>
   )
 }
 
 export default function App() {
   const [state, dispatch] = useReducer(AppStateReducer, { ccgraph: loadCCGraph(), activeUuid: '' });
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   window.addEventListener('beforeunload', () => {
     window.localStorage.setItem('ccedit-appstate', JSON.stringify(state.ccgraph));
@@ -162,15 +166,52 @@ export default function App() {
 
   return (
     <>
+      <section className={sidebarOpen ? 'sidebar-pane' : 'sidebar-pane closed'}>
+        <header className='sidebar-item'>
+          <img src={logo} alt='clicplot' />
+          <h1>CliCPlot</h1>
+        </header>
+        <button className='sidebar-item'>
+          <span className='material-icons-outlined sidebar-icon'>folder</span>
+          <span className='sidebar-text'>File</span>
+        </button>
+        <button className='sidebar-item'>
+          <span className='material-icons-outlined sidebar-icon'>grid_on</span>
+          <span className='sidebar-text'>Data</span>
+        </button>
+        <button className='sidebar-item'>
+          <span className='material-icons-outlined sidebar-icon'>query_stats</span>
+          <span className='sidebar-text'>Plot</span>
+        </button>
+        <button className='sidebar-item'>
+          <span className='material-icons-outlined sidebar-icon'>file_download</span>
+          <span className='sidebar-text'>Export</span>
+        </button>
+        <button className='sidebar-item'>
+          <span className='material-icons-outlined sidebar-icon'>extension</span>
+          <span className='sidebar-text'>Extension</span>
+        </button>
+        <button className='sidebar-item sidebar-settings'>
+          <span className='material-icons-outlined sidebar-icon'>settings</span>
+          <span className='sidebar-text'>Settings</span>
+        </button>
+      </section>
       <section className='list-pane'>
         <header>
-          <h1>CliCPlot</h1>
-          <h2>clinical cource editor</h2>
+          <button
+            className='toggle-sidebar-btn'
+            onClick={() => { setSidebarOpen(!sidebarOpen) }}>
+            {sidebarOpen && (<span className='material-icons'>menu_open</span>)}
+            {!sidebarOpen && (<span className='material-icons'>keyboard_arrow_right</span>)}
+          </button>
+          <input type='text' id='project-title-edit' />
         </header>
         <div className='line'></div>
         <menu>
           <button onClick={addGraph}>add</button>
-          <button>save</button>
+          <button onClick={
+            () => { saveGraphAsFile(state.ccgraph, 'graph.json') }
+          }>save</button>
           <button>load</button>
         </menu>
         <CCGraphListview items={ccgraphListProp} activeUuid={state.activeUuid} dispatch={dispatch} />

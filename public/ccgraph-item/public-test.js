@@ -1,4 +1,4 @@
-customType = {
+const customType = {
   name: 'Step Area',
   parameter: [
     {

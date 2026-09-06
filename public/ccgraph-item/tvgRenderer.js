@@ -62,9 +62,11 @@ function createPlaceholder(name, width, yRange) {
       x: width * 0.5,
       y: yRange[0] + height * 0.5,
       text: name,
-      fontStyle: {
-        size: 10,
-        align: 'middle',
+      font: {
+        size: 10
+      },
+      placement: {
+        anchor: 'middle',
         baseline: 'middle'
       },
       fill: { color: 'black' }
@@ -140,10 +142,12 @@ function lineRenderer(yRange, table) {
       x: -(col - 1) * 12 - 2,
       y: yRange[1],
       text: String(niceBounds.min),
-      fontStyle: {
-        align: 'end',
-        baseline: 'middle',
+      font: {
         size: 4
+      },
+      placement: {
+        anchor: 'end',
+        baseline: 'middle'
       },
       fill: { color: 'black' }
     });
@@ -152,10 +156,12 @@ function lineRenderer(yRange, table) {
       x: -(col - 1) * 12 - 2,
       y: yRange[0],
       text: String(niceBounds.max),
-      fontStyle: {
-        align: 'end',
-        baseline: 'middle',
+      font: {
         size: 4
+      },
+      placement: {
+        anchor: 'end',
+        baseline: 'middle'
       },
       fill: { color: 'black' }
     });

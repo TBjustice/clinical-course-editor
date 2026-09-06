@@ -1,5 +1,4 @@
 import * as TvgType from "./TvgType";
-
 /*
 function TvgLayout({ layout }: { layout: TvgType.Layout }) {
   const ref = useRef<SVGGElement>(null);
@@ -17,10 +16,10 @@ function DecodeStroke(stroke: TvgType.Stroke | undefined) {
   }
   else {
     return {
-      stroke: stroke.color,
-      strokeWidth: stroke.width,
+      stroke: stroke?.color,
+      strokeWidth: stroke?.width,
       strokeDasharray: (
-        stroke.dasharray?.map((item) => { return String(item) }).join(' ') ?? ''
+        stroke?.dasharray?.map((item) => { return String(item) }).join(' ') ?? ''
       )
     };
   }
@@ -33,23 +32,25 @@ function DecodeFill(fill: TvgType.Fill | undefined) {
   else {
     return {
       fill: fill.color,
-      fillRule: fill.rule ?? 'nonzero'
+      fillRule: fill.rule
     };
   }
 }
 
-function DecodeFontStyle(fontStyle: TvgType.FontStyle | undefined) {
-  if (fontStyle === undefined) {
-    return {};
-  }
-  else {
-    return {
-      fontFamily: fontStyle.family ?? '',
-      fontSize: fontStyle.size ?? 'medium',
-      textAlign: fontStyle.align ?? 'start',
-      dominantBaseline: fontStyle.baseline ?? 'alphabetic'
-    };
-  }
+function DecodeFont(font: TvgType.Font | undefined) {
+  return {
+    fontFamily: font?.family,
+    fontSize: font?.size,
+    fontWeight: font?.weight,
+    fontStyle: font?.style
+  };
+}
+
+function DecodeTextPlacement(placement: TvgType.TextPlacement | undefined) {
+  return {
+    textAnchor: placement?.anchor,
+    dominantBaseline: placement?.baseline,
+  };
 }
 
 export function TvgToSvg({ tvg }: { tvg: TvgType.TvgElement[] }) {
@@ -65,8 +66,8 @@ export function TvgToSvg({ tvg }: { tvg: TvgType.TvgElement[] }) {
                 y={item.y}
                 width={item.width}
                 height={item.height}
-                rx={item.rx ?? 0}
-                ry={item.ry ?? 0}
+                rx={item.rx}
+                ry={item.ry}
                 {...DecodeStroke(item.stroke)}
                 {...DecodeFill(item.fill)}
               />
@@ -126,7 +127,8 @@ export function TvgToSvg({ tvg }: { tvg: TvgType.TvgElement[] }) {
                 key={index}
                 x={item.x}
                 y={item.y}
-                {...DecodeFontStyle(item.fontStyle)}
+                {...DecodeTextPlacement(item.placement)}
+                {...DecodeFont(item.font)}
                 {...DecodeStroke(item.stroke)}
                 {...DecodeFill(item.fill)}
               >{item.text}</text >
