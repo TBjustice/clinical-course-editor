@@ -220,6 +220,9 @@ export default function App() {
 
         <div className='main-section-wrap'>
           <section className='list-pane'>
+            <header>
+              Graph Layer
+            </header>
             <menu>
               <button onClick={addGraph}>add</button>
               <button onClick={

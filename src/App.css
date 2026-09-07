@@ -7,8 +7,8 @@
   position: relative;
   transition-duration: 0.5s;
   transition-property: max-width;
-  background-color: var(--surface1);
-  box-shadow: 0 0 3px var(--accent);
+  background-color: var(--surface);
+  box-shadow: 0 0 5px var(--accent);
   overflow-x: hidden;
 
   .sidebar-item {
@@ -57,7 +57,7 @@
   }
 
   button:hover {
-    background-color: var(--surface2);
+    background-color: var(--surface1);
   }
 
   button.active {
@@ -91,9 +91,11 @@
 }
 
 .main-pane {
-  flex: 2;
+  flex: 1;
   border-right: 2px solid var(--border);
   padding-right: 0.5rem;
+  display: flex;
+  flex-direction: column;
 
   >header {
     display: flex;
@@ -139,6 +141,9 @@
 
   .main-section-wrap {
     display: flex;
+    flex: 1;
+    padding: 1rem 0;
+    gap: 1rem;
   }
 }
 
@@ -146,18 +151,22 @@
   width: 12rem;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+  border-radius: 1rem;
+  padding: 0.5rem;
 }
 
 .editor-pane {
   flex: 3;
-  padding: 1rem;
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
 .preview-pane {
-  flex: 2;
+  flex: 1;
 
   svg {
     background-color: white;

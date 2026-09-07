@@ -1,19 +1,9 @@
 .list-pane {
   header {
-    display: flex;
-    align-items: center;
     text-align: center;
     padding: 0.5rem 0;
-    gap: 0.5rem;
-
-    #project-title-edit {
-      height: 2rem;
-      font-size: 1.5rem;
-      min-width: 0;
-      flex: 1;
-      border: none;
-      outline: none;
-    }
+    color: var(--text-h);
+    font-weight: bold;
   }
 
   menu {

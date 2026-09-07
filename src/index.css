@@ -10,9 +10,9 @@
   --on-accent: #fff;
   --accent1: #6eb99e;
 
-  --surface: #fff;
+  --surface: #fafefd;
   --surface1: #f0f7f3;
-  --surface2: #a9f0d8;
+  --surface2: #bef5e2;
   color: var(--text);
   background: var(--bg);
 
@@ -45,9 +45,9 @@
   --on-accent: #fff;
   --accent1: #437764;
 
-  --surface: #000;
-  --surface1: #3b3f3d;
-  --surface2: #555856;
+  --surface: #555856;
+  --surface1: #2d3632;
+  --surface2: #1d1f1e;
 }
 
 *,
@@ -62,11 +62,12 @@
   overflow: hidden;
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 body {
   margin: 0;
+  background-color: var(--surface1);
 }
 
 h1,
