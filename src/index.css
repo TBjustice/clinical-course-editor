@@ -1,4 +1,6 @@
 :root {
+  color-scheme: light dark;
+
   --text: #405747;
   --text-h: #060d08;
   --bg: #fff;
@@ -9,8 +11,13 @@
   --accent1: #6eb99e;
 
   --surface: #fff;
-  --surface1: #edf5f0;
+  --surface1: #f0f7f3;
   --surface2: #d7e9e3;
+  color: var(--text);
+  background: var(--bg);
+
+  transition-duration: 0.5s;
+  transition-property: --text, --text-h, --bg, --border, --accent, --on-accent, --accent1, --surface, --surface1, --surface2;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -18,9 +25,6 @@
 
   font: 16px var(--sans);
   letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -31,27 +35,25 @@
   }
 }
 
+:root.darkmode {
+  --text: #c4dad1;
+  --text-h: #f3f6f4;
+  --bg: #16171d;
+  --border: #8eb394;
+
+  --accent: #16b882;
+  --on-accent: #fff;
+  --accent1: #437764;
+
+  --surface: #000;
+  --surface1: #2e302f;
+  --surface2: #1d1d1d;
+}
+
 *,
 *::after,
 *::before {
   box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #8ccf97;
-
-    --accent: #16b882;
-    --on-accent: #fff;
-    --accent1: #437764;
-
-    --surface: #000;
-    --surface1: #2e302f;
-    --surface2: #1d1d1d;
-  }
 }
 
 #root {
@@ -60,6 +62,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: row;
+  gap: 0.5rem;
 }
 
 body {
@@ -78,4 +81,96 @@ button {
   cursor: pointer;
   padding: 0;
   margin: 0;
+}
+
+.has-tooltip {
+  position: relative;
+}
+
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition-duration: 0.1s;
+  transition-delay: 0s;
+}
+
+.has-tooltip:hover .tooltip-right {
+  visibility: visible;
+  opacity: 1;
+  transition-duration: 0.5s;
+  transition-delay: 0.5s;
+}
+
+.tooltip-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 100%;
+  clip-path: polygon(0 50%, 0.5rem 0, 100% 0, 100% 100%, 0.5rem 100%);
+  padding: 0.25rem 0.25rem 0.25rem 0.5rem;
+  background: var(--accent1);
+  color: var(--on-accent);
+  z-index: 100;
+  white-space: nowrap;
+}
+
+@property --text {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #405747;
+}
+
+@property --text-h {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #060d08;
+}
+
+@property --bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #fff;
+}
+
+@property --border {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #b0bbb7;
+}
+
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #16b882;
+}
+
+@property --on-accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #fff;
+}
+
+@property --accent1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #6eb99e;
+}
+
+@property --surface {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #fff;
+}
+
+@property --surface1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #edf5f0;
+}
+
+@property --surface2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #d7e9e3;
 }

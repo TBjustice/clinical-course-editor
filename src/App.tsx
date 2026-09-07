@@ -10,6 +10,7 @@ import { TvgElementSchema, type TvgElement } from './tiny-vector-graphics/TvgTyp
 import logo from './assets/logo.svg';
 import SvgFitContent from './scripts/SvgFitContent.tsx';
 import 'material-icons/iconfont/material-icons.css';
+import SidebarTab from './SidebarTab.tsx';
 /*
 import JSONCrush from 'jsoncrush';
 */
@@ -147,6 +148,8 @@ function RenderSVG({ ccgraph }: { ccgraph: CCGraph }) {
 export default function App() {
   const [state, dispatch] = useReducer(AppStateReducer, { ccgraph: loadCCGraph(), activeUuid: '' });
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [useDarkmode, setUseDarkmode] = useState(false);
+  const [activeSidebar, setActiveSidebar] = useState('data');
 
   window.addEventListener('beforeunload', () => {
     window.localStorage.setItem('ccedit-appstate', JSON.stringify(state.ccgraph));
@@ -157,6 +160,10 @@ export default function App() {
       type: 'ADD_ITEM',
       payload: crypto.randomUUID()
     });
+  }
+
+  function onClickSidebar(tab: string) {
+    setActiveSidebar(tab);
   }
 
   const ccgraphListProp = state.ccgraph.uuidList.map(uuid => ({
@@ -171,32 +178,24 @@ export default function App() {
           <img src={logo} alt='clicplot' />
           <h1>CliCPlot</h1>
         </header>
-        <button className='sidebar-item'>
-          <span className='material-icons-outlined sidebar-icon'>folder</span>
-          <span className='sidebar-text'>File</span>
+        <SidebarTab
+          activeTab={activeSidebar}
+          onClickSidebar={onClickSidebar} />
+        <button className='sidebar-item sidebar-bottom-btn'
+          onClick={() => {
+            if (useDarkmode) document.documentElement.classList.remove('darkmode');
+            else document.documentElement.classList.add('darkmode');
+            setUseDarkmode(!useDarkmode);
+          }}>
+          <span className='material-icons-outlined sidebar-icon'>{useDarkmode ? 'light_mode' : 'dark_mode'}</span>
+          <span className='sidebar-text'>{useDarkmode ? 'Light Mode' : 'Dark Mode'}</span>
         </button>
         <button className='sidebar-item'>
-          <span className='material-icons-outlined sidebar-icon'>grid_on</span>
-          <span className='sidebar-text'>Data</span>
-        </button>
-        <button className='sidebar-item'>
-          <span className='material-icons-outlined sidebar-icon'>query_stats</span>
-          <span className='sidebar-text'>Plot</span>
-        </button>
-        <button className='sidebar-item'>
-          <span className='material-icons-outlined sidebar-icon'>file_download</span>
-          <span className='sidebar-text'>Export</span>
-        </button>
-        <button className='sidebar-item'>
-          <span className='material-icons-outlined sidebar-icon'>extension</span>
-          <span className='sidebar-text'>Extension</span>
-        </button>
-        <button className='sidebar-item sidebar-settings'>
-          <span className='material-icons-outlined sidebar-icon'>settings</span>
-          <span className='sidebar-text'>Settings</span>
+          <span className='material-icons-outlined sidebar-icon'>exit_to_app</span>
+          <span className='sidebar-text'>Project List</span>
         </button>
       </section>
-      <section className='list-pane'>
+      <section className='main-pane'>
         <header>
           <button
             className='toggle-sidebar-btn'
@@ -204,25 +203,41 @@ export default function App() {
             {sidebarOpen && (<span className='material-icons'>menu_open</span>)}
             {!sidebarOpen && (<span className='material-icons'>keyboard_arrow_right</span>)}
           </button>
-          <input type='text' id='project-title-edit' />
+          <div className='project-name'>
+            Untitled Project
+          </div>
+          <menu>
+            <button className='header-menu has-tooltip'>
+              <span className='material-icons-outlined'>edit</span>
+              <div className='tooltip-right tooltip'>Rename Project</div>
+            </button>
+            <button className='header-menu has-tooltip'>
+              <span className='material-icons-outlined'>save_as</span>
+              <div className='tooltip-right tooltip'>Save As</div>
+            </button>
+          </menu>
         </header>
-        <div className='line'></div>
-        <menu>
-          <button onClick={addGraph}>add</button>
-          <button onClick={
-            () => { saveGraphAsFile(state.ccgraph, 'graph.json') }
-          }>save</button>
-          <button>load</button>
-        </menu>
-        <CCGraphListview items={ccgraphListProp} activeUuid={state.activeUuid} dispatch={dispatch} />
-      </section>
-      <section className='editor-pane'>
-        {state.activeUuid.length > 0 && (
-          <CCGraphEditor
-            uuid={state.activeUuid}
-            ccgraphItem={state.ccgraph.ccgraphItems[state.activeUuid]}
-            dispatch={dispatch} />
-        )}
+
+        <div className='main-section-wrap'>
+          <section className='list-pane'>
+            <menu>
+              <button onClick={addGraph}>add</button>
+              <button onClick={
+                () => { saveGraphAsFile(state.ccgraph, 'graph.json') }
+              }>save</button>
+              <button>load</button>
+            </menu>
+            <CCGraphListview items={ccgraphListProp} activeUuid={state.activeUuid} dispatch={dispatch} />
+          </section>
+          <section className='editor-pane'>
+            {state.activeUuid.length > 0 && (
+              <CCGraphEditor
+                uuid={state.activeUuid}
+                ccgraphItem={state.ccgraph.ccgraphItems[state.activeUuid]}
+                dispatch={dispatch} />
+            )}
+          </section>
+        </div>
       </section>
       <section className='preview-pane'>
         <RenderSVG ccgraph={state.ccgraph}></RenderSVG>
