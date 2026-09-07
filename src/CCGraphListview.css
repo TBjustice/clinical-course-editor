@@ -38,16 +38,15 @@ li.ccgraph-list-item {
   display: flex;
   align-items: center;
   padding: 0.5rem;
-  border-radius: 0.5rem;
   height: 3rem;
   user-select: none;
   white-space: nowrap;
   gap: 0.5rem;
+  cursor: pointer;
 
   span {
     flex: 1;
     overflow: hidden;
-    margin-right: 0.5rem;
   }
 
   svg path {
@@ -60,17 +59,6 @@ li.ccgraph-list-item:hover {
 }
 
 li.ccgraph-list-item.active {
-  background: var(--accent);
-
-  span {
-    color: var(--on-accent);
-  }
-
-  svg path {
-    fill: var(--on-accent);
-  }
-
-  button:hover {
-    background: var(--accent1);
-  }
+  box-shadow: inset 4px 0 0 var(--accent);
+  background: var(--surface2);
 }

@@ -12,7 +12,7 @@
 
   --surface: #fff;
   --surface1: #f0f7f3;
-  --surface2: #d7e9e3;
+  --surface2: #a9f0d8;
   color: var(--text);
   background: var(--bg);
 
@@ -46,8 +46,8 @@
   --accent1: #437764;
 
   --surface: #000;
-  --surface1: #2e302f;
-  --surface2: #1d1d1d;
+  --surface1: #3b3f3d;
+  --surface2: #555856;
 }
 
 *,
