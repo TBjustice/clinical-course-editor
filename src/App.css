@@ -1,78 +1,114 @@
-.sidebar-pane {
-  max-width: 14rem;
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
-  padding: 0.5rem;
-  user-select: none;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+body {
+  margin: 0;
+  background-color: var(--surface1);
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+}
+
+button {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.has-tooltip {
   position: relative;
+}
+
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition-duration: 0.1s;
+  transition-delay: 0s;
+}
+
+.has-tooltip:hover .tooltip-right {
+  visibility: visible;
+  opacity: 1;
   transition-duration: 0.5s;
-  transition-property: max-width;
-  background-color: var(--surface);
-  box-shadow: 0 0 5px var(--accent);
-  overflow-x: hidden;
+  transition-delay: 0.5s;
+}
 
-  .sidebar-item {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    overflow-x: hidden;
-    white-space: nowrap;
-  }
+.tooltip-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 100%;
+  clip-path: polygon(0 50%, 0.5rem 0, 100% 0, 100% 100%, 0.5rem 100%);
+  padding: 0.25rem 0.25rem 0.25rem 0.5rem;
+  background: var(--accent1);
+  color: var(--on-accent);
+  z-index: 100;
+  white-space: nowrap;
+}
 
-  header {
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--border);
-    margin-bottom: 0.5rem;
 
-    img {
-      width: 3rem;
-      min-width: 3rem;
-    }
+.modal-window-bg {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #0005;
 
-    h1 {
-      margin: 0;
-      color: var(--text-h);
-      font-size: 2rem;
-    }
-  }
-
-  button {
-    height: 3rem;
+  .modal-window-content {
+    min-width: 30%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     border-radius: 0.5rem;
-    color: var(--text);
+    background-color: var(--surface);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 
-    span.sidebar-icon {
-      display: inline-block;
-      width: 3rem;
-      min-width: 3rem;
-      font-size: 2rem;
-    }
-
-    span.sidebar-text {
-      display: inline-block;
+    header {
+      font-weight: bold;
       font-size: 1.2rem;
-      flex: 1;
-      text-align: left;
+      color: var(--text-h);
+    }
+
+    menu {
+      display: flex;
+      gap: 1rem;
+      justify-content: end;
+      margin: 0;
+      padding: 0;
+
+      button {
+        color: var(--accent);
+        font-weight: bold;
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+      }
+
+      button:hover {
+        background-color: var(--surface1);
+      }
     }
   }
-
-  button:hover {
-    background-color: var(--surface1);
-  }
-
-  button.active {
-    background-color: var(--accent);
-    color: var(--on-accent);
-  }
-
-  button.sidebar-bottom-btn {
-    margin-top: auto;
-  }
 }
 
-.sidebar-pane.closed {
-  max-width: 4rem;
-}
 
 .toggle-sidebar-btn {
   width: 32px;

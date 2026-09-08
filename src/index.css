@@ -1,9 +1,7 @@
 :root {
   color-scheme: light dark;
-
   --text: #405747;
   --text-h: #060d08;
-  --bg: #fff;
   --border: #b0bbb7;
 
   --accent: #16b882;
@@ -13,8 +11,9 @@
   --surface: #fcfffe;
   --surface1: #e5eee9;
   --surface2: #a5f0d6;
+
   color: var(--text);
-  background: var(--bg);
+  background: var(--surface1);
 
   transition-duration: 0.5s;
   transition-property: --text, --text-h, --bg, --border, --accent, --on-accent, --accent1, --surface, --surface1, --surface2;
@@ -29,10 +28,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
 :root.darkmode {
@@ -54,66 +49,6 @@
 *::after,
 *::before {
   box-sizing: border-box;
-}
-
-#root {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-}
-
-body {
-  margin: 0;
-  background-color: var(--surface1);
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-}
-
-button {
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-}
-
-.has-tooltip {
-  position: relative;
-}
-
-.tooltip {
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition-duration: 0.1s;
-  transition-delay: 0s;
-}
-
-.has-tooltip:hover .tooltip-right {
-  visibility: visible;
-  opacity: 1;
-  transition-duration: 0.5s;
-  transition-delay: 0.5s;
-}
-
-.tooltip-right {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 100%;
-  clip-path: polygon(0 50%, 0.5rem 0, 100% 0, 100% 100%, 0.5rem 100%);
-  padding: 0.25rem 0.25rem 0.25rem 0.5rem;
-  background: var(--accent1);
-  color: var(--on-accent);
-  z-index: 100;
-  white-space: nowrap;
 }
 
 @property --text {

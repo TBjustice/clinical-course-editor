@@ -1,21 +1,11 @@
 import { useState } from 'react'
 import './CCGraphEditor.css'
-import type { CCGraphItem } from './CCGraph.tsx';
+import type { CCGraphItem } from './scripts/CCGraph.ts';
+import ModalWindow from './scripts/ModalWindow.tsx';
 
 export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: string, ccgraphItem: CCGraphItem, dispatch: CallableFunction }) {
   const [isDeleteDialogOpened, setDeleteDialogOpened] = useState(false);
-
-  function openDeleteDialog() {
-    setDeleteDialogOpened(true);
-  }
-
-  function closeDeleteDialog(yes: boolean) {
-    if (yes) {
-      dispatch({ type: 'DELETE_DATA', payload: uuid });
-    }
-    setDeleteDialogOpened(false);
-  }
-
+  
   function onGraphNameChange(event: React.ChangeEvent<HTMLInputElement>) {
     dispatch({
       type: 'SET_ITEM',
@@ -60,7 +50,7 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
     <>
       <header className='editor-header'>
         <input type='text' id='ccgraph-name' className='ccgraph-name' value={ccgraphItem.name} onChange={onGraphNameChange} />
-        <button onClick={openDeleteDialog}>
+        <button onClick={() => { setDeleteDialogOpened(true); }}>
           <svg width={24} height={24} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>
             <path d='M17 4 28 4A1 1 0 0128 6L4 6A1 1 0 014 4L15 4 15 2A1 1 0 0117 2ZM26 31 6 31 4 9A1 1 0 016 9L8 29 24 29 26 9A1 1 0 0128 9ZM9 10 10 26 12 26 11 10ZM15 10 15 26 17 26 17 10ZM21 10 20 26 22 26 23 10Z' fill='#f00' />
           </svg>
@@ -97,8 +87,31 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
           onChange={onGraphDataChange}></textarea>
       </section>
 
-      {isDeleteDialogOpened && (
-        <div
+      <ModalWindow
+        isOpen={isDeleteDialogOpened}
+        onCancelModal={() => {
+          setDeleteDialogOpened(false);
+        }}>
+        <header>Do you really want to delete this layer?</header>
+        <p>All the content (including parameters and data) are deleted permanently.</p>
+        <menu>
+          <button
+            onClick={() => {
+              setDeleteDialogOpened(false);
+            }}>Cancel</button>
+          <button
+            onClick={() => {
+              setDeleteDialogOpened(false);
+              dispatch({ type: 'DELETE_DATA', payload: uuid });
+            }}>Yes</button>
+        </menu>
+      </ModalWindow>
+    </>
+  )
+}
+
+/*
+<div
           className='dialog-wrap'
           onClick={(event) => {
             event.stopPropagation();
@@ -121,7 +134,5 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
             </div>
           </div>
         </div>
-      )}
-    </>
-  )
-}
+
+*/

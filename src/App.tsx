@@ -1,12 +1,13 @@
 import * as z from 'zod';
 import { useReducer, useState } from 'react';
 import './App.css'
-import type { CCGraph, CCGraphItem } from './CCGraph.tsx';
+import './styles/Sidebar.css'
+import type { CCGraph, CCGraphItem } from './scripts/CCGraph.ts';
 import CCGraphListview from './CCGraphListview.tsx'
 import CCGraphEditor from './CCGraphEditor.tsx'
 import { arrayMoveImmutable } from 'array-move';
-import { TvgToSvg } from './tiny-vector-graphics/TvgToSvg.tsx';
-import { TvgElementSchema, type TvgElement } from './tiny-vector-graphics/TvgType.ts';
+import { TvgToSvg } from './scripts/tiny-vector-graphics/TvgToSvg.tsx';
+import { TvgElementSchema, type TvgElement } from './scripts/tiny-vector-graphics/TvgType.ts';
 import logo from './assets/logo.svg';
 import SvgFitContent from './scripts/SvgFitContent.tsx';
 import 'material-icons/iconfont/material-icons.css';
