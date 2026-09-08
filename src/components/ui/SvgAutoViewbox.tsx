@@ -1,6 +1,6 @@
 import { useRef, useState, useLayoutEffect, type ReactNode } from "react";
 
-export default function SvgFitContent({ padding, children }: { padding: number, children: ReactNode }) {
+export default function SvgAutoViewbox({ padding, children }: { padding: number, children: ReactNode }) {
   const ref = useRef<SVGGElement>(null);
   const [viewBox, setViewBox] = useState("0 0 0 0");
 

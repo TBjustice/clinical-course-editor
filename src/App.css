@@ -58,58 +58,6 @@ button {
   white-space: nowrap;
 }
 
-
-.modal-window-bg {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background: #0005;
-
-  .modal-window-content {
-    min-width: 30%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 0.5rem;
-    background-color: var(--surface);
-    padding: 1rem;
-    border-radius: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-
-    header {
-      font-weight: bold;
-      font-size: 1.2rem;
-      color: var(--text-h);
-    }
-
-    menu {
-      display: flex;
-      gap: 1rem;
-      justify-content: end;
-      margin: 0;
-      padding: 0;
-
-      button {
-        color: var(--accent);
-        font-weight: bold;
-        font-size: 1rem;
-        padding: 0.5rem 1rem;
-      }
-
-      button:hover {
-        background-color: var(--surface1);
-      }
-    }
-  }
-}
-
-
 .toggle-sidebar-btn {
   width: 32px;
   height: 32px;

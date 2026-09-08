@@ -1,17 +1,15 @@
 import * as z from 'zod';
 import { useReducer, useState } from 'react';
 import './App.css'
-import './styles/Sidebar.css'
-import type { CCGraph, CCGraphItem } from './scripts/CCGraph.ts';
+import type { CCGraph, CCGraphItem } from './types/CCGraph.ts';
 import CCGraphListview from './CCGraphListview.tsx'
 import CCGraphEditor from './CCGraphEditor.tsx'
 import { arrayMoveImmutable } from 'array-move';
-import { TvgToSvg } from './scripts/tiny-vector-graphics/TvgToSvg.tsx';
+import { TvgToSvg } from './components/TvgToSvg.tsx';
 import { TvgElementSchema, type TvgElement } from './scripts/tiny-vector-graphics/TvgType.ts';
-import logo from './assets/logo.svg';
-import SvgFitContent from './scripts/SvgFitContent.tsx';
+import SvgAutoViewbox from './components/ui/SvgAutoViewbox.tsx';
 import 'material-icons/iconfont/material-icons.css';
-import SidebarTab from './SidebarTab.tsx';
+import Sidebar from './components/Sidebar.tsx';
 /*
 import JSONCrush from 'jsoncrush';
 */
@@ -140,17 +138,17 @@ function RenderSVG({ ccgraph }: { ccgraph: CCGraph }) {
   }
 
   return (
-    <SvgFitContent padding={2}>
+    <SvgAutoViewbox padding={2}>
       <TvgToSvg tvg={tvg} />
-    </SvgFitContent>
+    </SvgAutoViewbox>
   )
 }
 
 export default function App() {
   const [state, dispatch] = useReducer(AppStateReducer, { ccgraph: loadCCGraph(), activeUuid: '' });
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [useDarkmode, setUseDarkmode] = useState(false);
-  const [activeSidebar, setActiveSidebar] = useState('data');
+  const [darkmode, setDarkmode] = useState(false);
+  const [activeTab, setActiveTab] = useState('data');
 
   window.addEventListener('beforeunload', () => {
     window.localStorage.setItem('ccedit-appstate', JSON.stringify(state.ccgraph));
@@ -163,8 +161,8 @@ export default function App() {
     });
   }
 
-  function onClickSidebar(tab: string) {
-    setActiveSidebar(tab);
+  function onClickTab(tab: string) {
+    setActiveTab(tab);
   }
 
   const ccgraphListProp = state.ccgraph.uuidList.map(uuid => ({
@@ -174,28 +172,7 @@ export default function App() {
 
   return (
     <>
-      <section className={sidebarOpen ? 'sidebar-pane' : 'sidebar-pane closed'}>
-        <header className='sidebar-item'>
-          <img src={logo} alt='clicplot' />
-          <h1>CliCPlot</h1>
-        </header>
-        <SidebarTab
-          activeTab={activeSidebar}
-          onClickSidebar={onClickSidebar} />
-        <button className='sidebar-item sidebar-bottom-btn'
-          onClick={() => {
-            if (useDarkmode) document.documentElement.classList.remove('darkmode');
-            else document.documentElement.classList.add('darkmode');
-            setUseDarkmode(!useDarkmode);
-          }}>
-          <span className='material-icons-outlined sidebar-icon'>{useDarkmode ? 'light_mode' : 'dark_mode'}</span>
-          <span className='sidebar-text'>{useDarkmode ? 'Light Mode' : 'Dark Mode'}</span>
-        </button>
-        <button className='sidebar-item'>
-          <span className='material-icons-outlined sidebar-icon'>exit_to_app</span>
-          <span className='sidebar-text'>Project List</span>
-        </button>
-      </section>
+      <Sidebar open={sidebarOpen} darkmode={darkmode} setDarkmode={setDarkmode} activeTab={activeTab} onClickTab={onClickTab}/>
       <section className='main-pane'>
         <header>
           <button

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './CCGraphEditor.css'
-import type { CCGraphItem } from './scripts/CCGraph.ts';
-import ModalWindow from './scripts/ModalWindow.tsx';
+import type { CCGraphItem } from './types/CCGraph.ts';
+import Dialog  from './components/ui/Dialog .tsx';
 
 export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: string, ccgraphItem: CCGraphItem, dispatch: CallableFunction }) {
   const [isDeleteDialogOpened, setDeleteDialogOpened] = useState(false);
@@ -87,9 +87,9 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
           onChange={onGraphDataChange}></textarea>
       </section>
 
-      <ModalWindow
+      <Dialog 
         isOpen={isDeleteDialogOpened}
-        onCancelModal={() => {
+        onCancelDialog={() => {
           setDeleteDialogOpened(false);
         }}>
         <header>Do you really want to delete this layer?</header>
@@ -105,7 +105,7 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
               dispatch({ type: 'DELETE_DATA', payload: uuid });
             }}>Yes</button>
         </menu>
-      </ModalWindow>
+      </Dialog >
     </>
   )
 }

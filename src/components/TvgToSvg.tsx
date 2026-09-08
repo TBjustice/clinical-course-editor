@@ -1,4 +1,4 @@
-import * as TvgType from "./TvgType";
+import * as TvgType from "../scripts/tiny-vector-graphics/TvgType";
 /*
 function TvgLayout({ layout }: { layout: TvgType.Layout }) {
   const ref = useRef<SVGGElement>(null);
