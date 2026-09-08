@@ -78,7 +78,7 @@
   width: 32px;
   height: 32px;
   border: 1px solid var(--border);
-  background-color: var(--surface1);
+  background-color: var(--surface);
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -87,7 +87,7 @@
 }
 
 .toggle-sidebar-btn:hover {
-  background-color: var(--surface2);
+  background-color: var(--surface1);
 }
 
 .main-pane {
@@ -133,7 +133,7 @@
       }
 
       button:hover {
-        background-color: var(--surface1);
+        background-color: var(--surface2);
       }
     }
 

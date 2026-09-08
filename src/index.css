@@ -10,9 +10,9 @@
   --on-accent: #fff;
   --accent1: #6eb99e;
 
-  --surface: #fafefd;
-  --surface1: #f0f7f3;
-  --surface2: #bef5e2;
+  --surface: #fcfffe;
+  --surface1: #e5eee9;
+  --surface2: #a5f0d6;
   color: var(--text);
   background: var(--bg);
 
@@ -39,7 +39,7 @@
   --text: #c4dad1;
   --text-h: #f3f6f4;
   --bg: #16171d;
-  --border: #8eb394;
+  --border: #6a726c;
 
   --accent: #16b882;
   --on-accent: #fff;

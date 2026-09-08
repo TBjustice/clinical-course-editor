@@ -51,4 +51,5 @@ li.ccgraph-list-item:hover {
 li.ccgraph-list-item.active {
   box-shadow: inset 4px 0 0 var(--accent);
   background: var(--surface2);
+  color: var(--text-h);
 }
