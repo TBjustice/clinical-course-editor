@@ -1,7 +1,7 @@
 import { useState } from "react";
 import 'material-icons/iconfont/material-icons.css';
 import logo from '../assets/logo.svg';
-import styles from './Sidebar.module.css'
+import styles from './SidebarSection.module.css'
 
 function SidebarTab({ activeTab, onClickTab }: { activeTab: string, onClickTab:CallableFunction }) {
   return (
@@ -34,7 +34,7 @@ function SidebarTab({ activeTab, onClickTab }: { activeTab: string, onClickTab:C
   )
 }
 
-export default function Sidebar({open, darkmode, setDarkmode, activeTab, onClickTab}: {open: boolean, darkmode:boolean, setDarkmode:CallableFunction, activeTab: string, onClickTab:CallableFunction}) {
+export default function SidebarSection({open, darkmode, setDarkmode, activeTab, onClickTab}: {open: boolean, darkmode:boolean, setDarkmode:CallableFunction, activeTab: string, onClickTab:CallableFunction}) {
   useState(true);
   return (
     <section className={open ? styles.sidebar : `${styles.sidebar} close`}>

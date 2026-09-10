@@ -1,0 +1,77 @@
+.main {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+
+  .editor{
+    flex: 1;
+    border-right: 2px solid var(--border);
+    padding-right: 0.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .view{
+    flex: 1;
+    svg{
+      background-color: white;
+    }
+  }
+}
+
+.header {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  align-items: center;
+  border-bottom: 2px solid var(--border);
+
+  .toggle_sidebar {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-h);
+
+    &:hover {
+      background-color: var(--surface1);
+    }
+  }
+
+  .project_name {
+    font-size: 1.2rem;
+    max-width: 10rem;
+    white-space: nowrap;
+    overflow-x: hidden;
+    color: var(--text-h);
+  }
+
+  menu {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+
+    button {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        background-color: var(--surface2);
+      }
+
+      span {
+        color: var(--text);
+      }
+    }
+  }
+}

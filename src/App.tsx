@@ -9,7 +9,8 @@ import { TvgToSvg } from './components/TvgToSvg.tsx';
 import { TvgElementSchema, type TvgElement } from './scripts/tiny-vector-graphics/TvgType.ts';
 import SvgAutoViewbox from './components/ui/SvgAutoViewbox.tsx';
 import 'material-icons/iconfont/material-icons.css';
-import Sidebar from './components/Sidebar.tsx';
+import SidebarSection from './components/SidebarSection.tsx';
+import MainSection from './components/MainSection.tsx';
 /*
 import JSONCrush from 'jsoncrush';
 */
@@ -36,19 +37,6 @@ function loadCCGraph() {
   }
 }
 
-function saveGraphAsFile(graph: CCGraph, filename: string) {
-  const text = JSON.stringify(graph);
-  const blob = new Blob([text], { type: 'text/plain' });
-  const fileUrl = URL.createObjectURL(blob);
-  const element = document.createElement('a');
-  element.setAttribute('href', fileUrl);
-  element.setAttribute('download', filename);
-  element.style.display = 'none';
-  document.body.appendChild(element);
-  element.click();
-  document.body.removeChild(element);
-  URL.revokeObjectURL(fileUrl);
-}
 
 type AppStateAction =
   | { type: 'ADD_ITEM'; payload: string }
@@ -128,22 +116,6 @@ function AppStateReducer(state: AppState, action: AppStateAction) {
   }
 }
 
-function RenderSVG({ ccgraph }: { ccgraph: CCGraph }) {
-  let tvg: TvgElement[] = [];
-  if ('CCGraphRendererTvg' in window && typeof window.CCGraphRendererTvg == 'function') {
-    const parsed = z.array(TvgElementSchema).safeParse(window.CCGraphRendererTvg(ccgraph));
-    if (parsed.success) {
-      tvg = parsed.data;
-    }
-  }
-
-  return (
-    <SvgAutoViewbox padding={2}>
-      <TvgToSvg tvg={tvg} />
-    </SvgAutoViewbox>
-  )
-}
-
 export default function App() {
   const [state, dispatch] = useReducer(AppStateReducer, { ccgraph: loadCCGraph(), activeUuid: '' });
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -154,47 +126,22 @@ export default function App() {
     window.localStorage.setItem('ccedit-appstate', JSON.stringify(state.ccgraph));
   });
 
-  function addGraph() {
-    dispatch({
-      type: 'ADD_ITEM',
-      payload: crypto.randomUUID()
-    });
-  }
-
   function onClickTab(tab: string) {
     setActiveTab(tab);
   }
 
-  const ccgraphListProp = state.ccgraph.uuidList.map(uuid => ({
-    uuid,
-    name: state.ccgraph.ccgraphItems[uuid].name
-  }));
-
   return (
     <>
-      <Sidebar open={sidebarOpen} darkmode={darkmode} setDarkmode={setDarkmode} activeTab={activeTab} onClickTab={onClickTab}/>
+      <SidebarSection open={sidebarOpen} darkmode={darkmode} setDarkmode={setDarkmode} activeTab={activeTab} onClickTab={onClickTab}/>
+      <MainSection activeTab={activeTab} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}  activeUuid={state.activeUuid} ccgraph={state.ccgraph} dispatch={dispatch}/>
+    </>
+  )
+};
+
+/*
+
       <section className='main-pane'>
-        <header>
-          <button
-            className='toggle-sidebar-btn'
-            onClick={() => { setSidebarOpen(!sidebarOpen) }}>
-            {sidebarOpen && (<span className='material-icons'>menu_open</span>)}
-            {!sidebarOpen && (<span className='material-icons'>keyboard_arrow_right</span>)}
-          </button>
-          <div className='project-name'>
-            Untitled Project
-          </div>
-          <menu>
-            <button className='header-menu has-tooltip'>
-              <span className='material-icons-outlined'>edit</span>
-              <div className='tooltip-right tooltip'>Rename Project</div>
-            </button>
-            <button className='header-menu has-tooltip'>
-              <span className='material-icons-outlined'>save_as</span>
-              <div className='tooltip-right tooltip'>Save As</div>
-            </button>
-          </menu>
-        </header>
+        <MainHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>
 
         <div className='main-section-wrap'>
           <section className='list-pane'>
@@ -223,10 +170,10 @@ export default function App() {
       <section className='preview-pane'>
         <RenderSVG ccgraph={state.ccgraph}></RenderSVG>
       </section>
-    </>
-  )
-};
+*/
+
 
 /*
+
         <div dangerouslySetInnerHTML={{ __html: svgPreview }}></div>
 */

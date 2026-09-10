@@ -5,6 +5,7 @@ import {
 } from '@lumel/react-sortable-hoc';
 import React from 'react';
 import './CCGraphListview.css'
+import styles from './components/PlotEditor.module.css'
 
 type CCGraphItemProp = {
   uuid: string,
@@ -23,7 +24,7 @@ export default function CCGraphListview({ items, activeUuid, dispatch }: { items
     React.forwardRef(({ value, isActive, dispatch }: { value: CCGraphItemProp, isActive: boolean, dispatch: CallableFunction }, ref: React.Ref<HTMLLIElement> | undefined) => (
       <li
         ref={ref}
-        className={isActive ? 'active ccgraph-list-item' : 'ccgraph-list-item'}
+        className={isActive ? `${styles.layer_item} active` : styles.layer_item}
         onClick={() => {
           dispatch({ type: 'SELECT_ITEM', payload: value.uuid });
         }}>
@@ -35,7 +36,7 @@ export default function CCGraphListview({ items, activeUuid, dispatch }: { items
 
   const ListContainer = SortableContainer<{ items: CCGraphItemProp[], activeUuid: String, dispatch: CallableFunction }>(
     React.forwardRef(({ items }: { items: CCGraphItemProp[] }, ref: React.Ref<HTMLUListElement> | undefined) => (
-      <ul ref={ref} className='ccgraph-list'>
+      <ul ref={ref} className={styles.layer_list}>
         {items.map((value, index) => (
           <ListItem key={value.uuid} index={index} isActive={value.uuid == activeUuid} value={value} dispatch={dispatch} />
         ))}
