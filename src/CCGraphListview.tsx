@@ -5,7 +5,7 @@ import {
 } from '@lumel/react-sortable-hoc';
 import React from 'react';
 import './CCGraphListview.css'
-import styles from './components/PlotEditor.module.css'
+import styles from './components/PlotTab.module.css'
 
 type CCGraphItemProp = {
   uuid: string,

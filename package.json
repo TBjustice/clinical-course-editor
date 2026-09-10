@@ -13,6 +13,7 @@
   "dependencies": {
     "@lumel/react-sortable-hoc": "^2.0.6",
     "array-move": "^4.0.0",
+    "dayjs": "^1.11.23",
     "jsoncrush": "^1.1.8",
     "material-icons": "^1.13.14",
     "react": "^19.2.8",

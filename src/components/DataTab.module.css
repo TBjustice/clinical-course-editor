@@ -1,0 +1,39 @@
+.table {
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+
+    &:global(.active) {
+      outline: 3px solid var(--text-h);
+      outline-offset: -3px;
+    }
+  }
+}
+
+.thead {
+  background-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.tbody {
+  tr {
+    &:nth-child(odd) {
+      background-color: var(--surface);
+    }
+
+    &:nth-child(even) {
+      background-color: var(--surface1);
+    }
+
+    &:first-child {
+
+      th,
+      td {
+        border-top: none;
+      }
+    }
+  }
+}
