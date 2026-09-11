@@ -33,7 +33,7 @@ const CliCPlotSchema = z.object({
   parameters: z.object()
 });
 
-const CliCAxesSchema = z.object({
+const CliCLayerSchema = z.object({
   charts: z.array(CliCPlotSchema),
   height: z.number()
 });
@@ -41,7 +41,7 @@ const CliCAxesSchema = z.object({
 const CliCFigureSchema = z.object({
   width: z.number(),
   dateRange: z.array(z.iso.datetime()).length(2),
-  axesList: z.array(CliCAxesSchema)
+  layerList: z.array(CliCLayerSchema)
 });
 
 const CliCProjectSchema = z.object({

@@ -2,6 +2,7 @@
   color-scheme: light dark;
   --text: #405747;
   --text-h: #060d08;
+  --bg: #fff;
   --border: #b0bbb7;
 
   --accent: #16b882;
@@ -33,7 +34,7 @@
 :root.darkmode {
   --text: #c4dad1;
   --text-h: #f3f6f4;
-  --bg: #16171d;
+  --bg: #000;
   --border: #6a726c;
 
   --accent: #16b882;

@@ -1,3 +1,4 @@
+/*
 .list-pane {
   header {
     text-align: center;
@@ -24,7 +25,7 @@
 }
 
 
-li.ccgraph-list-item {
+.ccgraph-list-item {
   display: flex;
   align-items: center;
   padding: 0.5rem;
@@ -44,12 +45,13 @@ li.ccgraph-list-item {
   }
 }
 
-li.ccgraph-list-item:hover {
+.ccgraph-list-item:hover {
   background: var(--surface1);
 }
 
-li.ccgraph-list-item.active {
+.ccgraph-list-item.active {
   box-shadow: inset 4px 0 0 var(--accent);
   background: var(--surface2);
   color: var(--text-h);
 }
+*/

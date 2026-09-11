@@ -2,12 +2,7 @@ import * as z from 'zod';
 import { useReducer, useState } from 'react';
 import './App.css'
 import type { CCGraph, CCGraphItem } from './types/CCGraph.ts';
-import CCGraphListview from './CCGraphListview.tsx'
-import CCGraphEditor from './CCGraphEditor.tsx'
 import { arrayMoveImmutable } from 'array-move';
-import { TvgToSvg } from './components/TvgToSvg.tsx';
-import { TvgElementSchema, type TvgElement } from './scripts/tiny-vector-graphics/TvgType.ts';
-import SvgAutoViewbox from './components/ui/SvgAutoViewbox.tsx';
 import 'material-icons/iconfont/material-icons.css';
 import SidebarSection from './components/SidebarSection.tsx';
 import MainSection from './components/MainSection.tsx';
@@ -60,7 +55,6 @@ function AppStateReducer(state: AppState, action: AppStateAction) {
         };
         return {
           ...state,
-          activeUuid: action.payload,
           ccgraph: {
             ...state.ccgraph,
             uuidList: [...state.ccgraph.uuidList, action.payload],

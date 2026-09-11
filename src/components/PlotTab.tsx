@@ -7,7 +7,7 @@ import { TvgToSvg } from './TvgToSvg';
 import { TvgElementSchema, type TvgElement } from '../scripts/tiny-vector-graphics/TvgType';
 import z from 'zod';
 
-
+/*
 function saveGraphAsFile(graph: CCGraph, filename: string) {
   const text = JSON.stringify(graph);
   const blob = new Blob([text], { type: 'text/plain' });
@@ -21,19 +21,13 @@ function saveGraphAsFile(graph: CCGraph, filename: string) {
   document.body.removeChild(element);
   URL.revokeObjectURL(fileUrl);
 }
+*/
 
 export function PlotTabEditor({ ccgraph, activeUuid, dispatch }: {
   ccgraph: CCGraph,
   activeUuid: string,
   dispatch: CallableFunction
 }) {
-
-  function addGraph() {
-    dispatch({
-      type: 'ADD_ITEM',
-      payload: crypto.randomUUID()
-    });
-  }
 
   const ccgraphListProp = ccgraph.uuidList.map(uuid => ({
     uuid,
@@ -46,13 +40,6 @@ export function PlotTabEditor({ ccgraph, activeUuid, dispatch }: {
         <header>
           Graph Layer
         </header>
-        <menu>
-          <button onClick={addGraph}>add</button>
-          <button onClick={
-            () => { saveGraphAsFile(ccgraph, 'graph.json') }
-          }>save</button>
-          <button>load</button>
-        </menu>
         <CCGraphListview items={ccgraphListProp} activeUuid={activeUuid} dispatch={dispatch} />
       </section>
       <section className={styles.editor}>

@@ -24,6 +24,11 @@ button {
   cursor: pointer;
   padding: 0;
   margin: 0;
+
+  &:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: -3px;
+  }
 }
 
 .has-tooltip {
@@ -49,7 +54,7 @@ button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  left: 100%;
+  left: 102%;
   clip-path: polygon(0 50%, 0.5rem 0, 100% 0, 100% 100%, 0.5rem 100%);
   padding: 0.25rem 0.25rem 0.25rem 0.5rem;
   background: var(--accent1);
@@ -58,10 +63,21 @@ button {
   white-space: nowrap;
 }
 
-.preview-pane {
-  flex: 1;
 
-  svg {
-    background-color: white;
-  }
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ddd;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

@@ -3,18 +3,22 @@
   display: flex;
   gap: 1rem;
 
-  .editor{
+  .editor {
     flex: 1;
-    border-right: 2px solid var(--border);
-    padding-right: 0.5rem;
     display: flex;
     flex-direction: column;
   }
 
-  .view{
+  .view {
     flex: 1;
-    svg{
-      background-color: white;
+    border-left: 2px solid var(--border);
+
+    svg {
+      background-color: var(--bg);
+
+      text {
+        fill: var(--text-h);
+      }
     }
   }
 }
