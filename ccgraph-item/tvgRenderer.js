@@ -98,7 +98,7 @@ function lineRenderer(yRange, table) {
   const DashArrayTable = [
     [],
     [3, 1],
-    [1, 3],
+    [1, 2],
     [3, 1, 1, 1]
   ]
   const ColorTable = ['#1f77b4',
