@@ -1,4 +1,3 @@
-import * as z from 'zod';
 import { useReducer, useState } from 'react';
 import './App.css'
 import type { CCGraph, CCGraphItem } from './types/CCGraph.ts';
@@ -112,62 +111,17 @@ function AppStateReducer(state: AppState, action: AppStateAction) {
 
 export default function App() {
   const [state, dispatch] = useReducer(AppStateReducer, { ccgraph: loadCCGraph(), activeUuid: '' });
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [darkmode, setDarkmode] = useState(false);
+  const stateSidebarOpen = useState(true);
   const [activeTab, setActiveTab] = useState('data');
 
   window.addEventListener('beforeunload', () => {
     window.localStorage.setItem('ccedit-appstate', JSON.stringify(state.ccgraph));
   });
 
-  function onClickTab(tab: string) {
-    setActiveTab(tab);
-  }
-
   return (
     <>
-      <SidebarSection open={sidebarOpen} darkmode={darkmode} setDarkmode={setDarkmode} activeTab={activeTab} onClickTab={onClickTab}/>
-      <MainSection activeTab={activeTab} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}  activeUuid={state.activeUuid} ccgraph={state.ccgraph} dispatch={dispatch}/>
+      <SidebarSection open={stateSidebarOpen[0]} activeTab={activeTab} setActiveTab={setActiveTab}/>
+      <MainSection activeTab={activeTab} stateSidebarOpen={stateSidebarOpen}  activeUuid={state.activeUuid} ccgraph={state.ccgraph} dispatch={dispatch}/>
     </>
   )
 };
-
-/*
-
-      <section className='main-pane'>
-        <MainHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>
-
-        <div className='main-section-wrap'>
-          <section className='list-pane'>
-            <header>
-              Graph Layer
-            </header>
-            <menu>
-              <button onClick={addGraph}>add</button>
-              <button onClick={
-                () => { saveGraphAsFile(state.ccgraph, 'graph.json') }
-              }>save</button>
-              <button>load</button>
-            </menu>
-            <CCGraphListview items={ccgraphListProp} activeUuid={state.activeUuid} dispatch={dispatch} />
-          </section>
-          <section className='editor-pane'>
-            {state.activeUuid.length > 0 && (
-              <CCGraphEditor
-                uuid={state.activeUuid}
-                ccgraphItem={state.ccgraph.ccgraphItems[state.activeUuid]}
-                dispatch={dispatch} />
-            )}
-          </section>
-        </div>
-      </section>
-      <section className='preview-pane'>
-        <RenderSVG ccgraph={state.ccgraph}></RenderSVG>
-      </section>
-*/
-
-
-/*
-
-        <div dangerouslySetInnerHTML={{ __html: svgPreview }}></div>
-*/

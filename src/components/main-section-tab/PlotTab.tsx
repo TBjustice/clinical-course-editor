@@ -1,10 +1,10 @@
-import CCGraphEditor from '../CCGraphEditor';
-import CCGraphListview from '../CCGraphListview';
-import type { CCGraph } from '../types/CCGraph';
+import CCGraphEditor from '../../CCGraphEditor';
+import CCGraphListview from '../../CCGraphListview';
+import type { CCGraph } from '../../types/CCGraph';
 import styles from './PlotTab.module.css'
-import SvgAutoViewbox from './ui/SvgAutoViewbox';
-import { TvgToSvg } from './TvgToSvg';
-import { TvgElementSchema, type TvgElement } from '../scripts/tiny-vector-graphics/TvgType';
+import SvgAutoViewbox from '../ui/SvgAutoViewbox';
+import { TvgToSvg } from '../ui/TvgToSvg';
+import { TvgElementSchema, type TvgElement } from '../../scripts/tiny-vector-graphics/TvgType';
 import z from 'zod';
 
 /*

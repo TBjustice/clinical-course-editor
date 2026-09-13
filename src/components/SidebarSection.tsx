@@ -3,30 +3,30 @@ import 'material-icons/iconfont/material-icons.css';
 import logo from '../assets/logo.svg';
 import styles from './SidebarSection.module.css'
 
-function SidebarTab({ activeTab, onClickTab }: { activeTab: string, onClickTab:CallableFunction }) {
+function SidebarTab({ activeTab, setActiveTab }: { activeTab: string, setActiveTab:CallableFunction }) {
   return (
     <>
       <button
         className={activeTab === 'data' ? `${styles.item} active` : styles.item}
-        onClick={() => { onClickTab('data'); }}>
+        onClick={() => { setActiveTab('data'); }}>
         <span className={`material-icons-outlined ${styles.icon}`}>grid_on</span>
         <span className={styles.text}>Data</span>
       </button>
       <button
         className={activeTab === 'plot' ? `${styles.item} active` : styles.item}
-        onClick={() => { onClickTab('plot'); }}>
+        onClick={() => { setActiveTab('plot'); }}>
         <span className={`material-icons-outlined ${styles.icon}`}>query_stats</span>
         <span className={styles.text}>Plot</span>
       </button>
       <button
         className={activeTab === 'export' ? `${styles.item} active` : styles.item}
-        onClick={() => { onClickTab('export'); }}>
+        onClick={() => { setActiveTab('export'); }}>
         <span className={`material-icons-outlined ${styles.icon}`}>file_download</span>
         <span className={styles.text}>Export</span>
       </button>
       <button
         className={activeTab === 'extension' ? `${styles.item} active` : styles.item}
-        onClick={() => { onClickTab('extension'); }}>
+        onClick={() => { setActiveTab('extension'); }}>
         <span className={`material-icons-outlined ${styles.icon}`}>extension</span>
         <span className={styles.text}>Extension</span>
       </button>
@@ -34,8 +34,8 @@ function SidebarTab({ activeTab, onClickTab }: { activeTab: string, onClickTab:C
   )
 }
 
-export default function SidebarSection({open, darkmode, setDarkmode, activeTab, onClickTab}: {open: boolean, darkmode:boolean, setDarkmode:CallableFunction, activeTab: string, onClickTab:CallableFunction}) {
-  useState(true);
+export default function SidebarSection({open, activeTab, setActiveTab}: {open: boolean, activeTab: string, setActiveTab:CallableFunction}) {
+  const [darkmode, setDarkmode] = useState(false);
   return (
     <section className={open ? styles.sidebar : `${styles.sidebar} close`}>
       <header className={styles.item}>
@@ -44,7 +44,7 @@ export default function SidebarSection({open, darkmode, setDarkmode, activeTab, 
       </header>
       <SidebarTab
         activeTab={activeTab}
-        onClickTab={onClickTab} />
+        setActiveTab={setActiveTab} />
       <button className={`${styles.item} ${styles.bottom_item}`}
         onClick={() => {
           if (darkmode) document.documentElement.classList.remove('darkmode');

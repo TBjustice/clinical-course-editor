@@ -3,7 +3,6 @@
   flex: 1;
   padding: 1rem 0;
   gap: 1rem;
-  overflow-y: auto;
 }
 
 .layer_editor {
@@ -14,8 +13,8 @@
   border-radius: 1rem;
   padding: 0.5rem;
 
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: visible;
+  overflow-y: clip;
 
   header {
     text-align: center;
@@ -54,6 +53,10 @@
     background: var(--surface2);
     color: var(--text-h);
   }
+}
+
+.layer_item_drag {
+  cursor: ns-resize;
 }
 
 .layer_item_name {

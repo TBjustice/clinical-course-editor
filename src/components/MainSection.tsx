@@ -1,12 +1,12 @@
 import type { CCGraph } from '../types/CCGraph';
-import { DataTabView } from './DataTab';
+import { DataTabView } from './main-section-tab/DataTab';
 import styles from './MainSection.module.css'
-import { PlotTabEditor, PlotTabView } from './PlotTab';
+import { PlotTabEditor, PlotTabView } from './main-section-tab/PlotTab';
 
-function MainHeader({ sidebarOpen, setSidebarOpen }: {
-  sidebarOpen: boolean,
-  setSidebarOpen: CallableFunction
+function MainHeader({ stateSidebarOpen }: {
+  stateSidebarOpen: [boolean, CallableFunction]
 }) {
+  const [sidebarOpen, setSidebarOpen] = stateSidebarOpen;
   return (
     <header className={styles.header}>
       <button
@@ -60,7 +60,7 @@ function ViewContent({ activeTab, ccgraph }: {
 }) {
   switch (activeTab) {
     case 'data':
-      return (<DataTabView/>);
+      return (<DataTabView />);
     case 'plot':
     case 'export':
       return (<PlotTabView ccgraph={ccgraph} />);
@@ -70,9 +70,8 @@ function ViewContent({ activeTab, ccgraph }: {
   return (<></>);
 }
 
-export default function MainSection({ sidebarOpen, setSidebarOpen, activeTab, ccgraph, activeUuid, dispatch }: {
-  sidebarOpen: boolean,
-  setSidebarOpen: CallableFunction,
+export default function MainSection({ stateSidebarOpen, activeTab, ccgraph, activeUuid, dispatch }: {
+  stateSidebarOpen: [boolean, CallableFunction],
   activeTab: string,
   ccgraph: CCGraph,
   activeUuid: string,
@@ -81,7 +80,7 @@ export default function MainSection({ sidebarOpen, setSidebarOpen, activeTab, cc
   return (
     <section className={styles.main}>
       <div className={styles.editor}>
-        <MainHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <MainHeader stateSidebarOpen={stateSidebarOpen} />
         <EditorContent activeTab={activeTab} activeUuid={activeUuid} ccgraph={ccgraph} dispatch={dispatch} />
       </div>
       <div className={styles.view}>
