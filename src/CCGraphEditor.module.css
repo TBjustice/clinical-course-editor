@@ -1,0 +1,55 @@
+.header {
+    display: flex;
+    gap: 1rem;
+
+    .ccgraph_name {
+      border: none;
+      outline: none;
+      border-bottom: 2px solid #999;
+      padding: 5px 10px;
+      width: 100%;
+      height: 2rem;
+      font-size: 1.5rem;
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+.section{
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+
+    header{
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    select{
+      font-size: 1rem;
+      outline: none;
+      height: 2rem;
+      min-width: 10rem;
+    }
+
+    div.flexbox{
+      display: flex;
+    }
+
+    input.ccgraph-range[type="range"]{
+      min-width: 15rem;
+    }
+
+    input.ccgraph-range[type="number"]{
+      width: 4rem;
+    }
+
+    textarea{
+      width:100%;
+      min-height: 10rem;
+      resize: none;
+    }
+  }

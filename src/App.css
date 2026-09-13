@@ -57,27 +57,8 @@ button {
   left: 102%;
   clip-path: polygon(0 50%, 0.5rem 0, 100% 0, 100% 100%, 0.5rem 100%);
   padding: 0.25rem 0.25rem 0.25rem 0.5rem;
-  background: var(--accent1);
+  background: var(--accent);
   color: var(--on-accent);
   z-index: 100;
   white-space: nowrap;
-}
-
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #ddd;
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
 }

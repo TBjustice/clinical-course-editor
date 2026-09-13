@@ -1,39 +1,18 @@
-.table {
-  border-collapse: collapse;
+.list_item {
+  color: var(--text);
 
-  th,
-  td {
-    padding: 0.5rem;
-    border: 1px solid var(--border);
+  &:hover {
+    background-color: var(--surface1);
+  }
 
-    &:global(.active) {
-      outline: 3px solid var(--text-h);
-      outline-offset: -3px;
+  &:global(.active) {
+    color: var(--text-h);
+    background-color: var(--surface2);
+
+    :global(.icon) {
+      color: var(--accent);
     }
   }
-}
 
-.thead {
-  background-color: var(--accent);
-  color: var(--on-accent);
-}
 
-.tbody {
-  tr {
-    &:nth-child(odd) {
-      background-color: var(--surface);
-    }
-
-    &:nth-child(even) {
-      background-color: var(--surface1);
-    }
-
-    &:first-child {
-
-      th,
-      td {
-        border-top: none;
-      }
-    }
-  }
 }

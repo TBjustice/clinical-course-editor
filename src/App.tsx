@@ -5,6 +5,7 @@ import { arrayMoveImmutable } from 'array-move';
 import 'material-icons/iconfont/material-icons.css';
 import SidebarSection from './components/SidebarSection.tsx';
 import MainSection from './components/MainSection.tsx';
+import { SidebarOpenContext } from './contexts/AppContexts.ts';
 /*
 import JSONCrush from 'jsoncrush';
 */
@@ -111,7 +112,7 @@ function AppStateReducer(state: AppState, action: AppStateAction) {
 
 export default function App() {
   const [state, dispatch] = useReducer(AppStateReducer, { ccgraph: loadCCGraph(), activeUuid: '' });
-  const stateSidebarOpen = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState('data');
 
   window.addEventListener('beforeunload', () => {
@@ -120,8 +121,11 @@ export default function App() {
 
   return (
     <>
-      <SidebarSection open={stateSidebarOpen[0]} activeTab={activeTab} setActiveTab={setActiveTab}/>
-      <MainSection activeTab={activeTab} stateSidebarOpen={stateSidebarOpen}  activeUuid={state.activeUuid} ccgraph={state.ccgraph} dispatch={dispatch}/>
+      <SidebarOpenContext
+        value={{ value: sidebarOpen, setValue: setSidebarOpen }}>
+        <SidebarSection activeTab={activeTab} setActiveTab={setActiveTab} />
+        <MainSection activeTab={activeTab} activeUuid={state.activeUuid} ccgraph={state.ccgraph} dispatch={dispatch} />
+      </SidebarOpenContext>
     </>
   )
 };

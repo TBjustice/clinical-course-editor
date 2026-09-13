@@ -1,0 +1,51 @@
+.editor {
+  flex: 1;
+  max-width: 36rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.view {
+  flex: 1;
+  border-left: 2px solid var(--border);
+}
+
+.list_and_editor {
+  display: flex;
+  flex: 1;
+  padding: 1rem 0;
+  gap: 1rem;
+
+  .list_section {
+    width: 12rem;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border-radius: 1rem;
+    padding: 0.5rem;
+
+    overflow-x: visible;
+    overflow-y: clip;
+
+    header {
+      text-align: center;
+      padding: 0.5rem 0;
+      color: var(--text-h);
+      font-weight: bold;
+    }
+  }
+
+}
+
+button.list_item {
+  display: flex;
+  align-items: center;
+  height: 2rem;
+  user-select: none;
+  white-space: nowrap;
+  gap: 0.25rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: initial;
+  font-size: 1rem;
+}

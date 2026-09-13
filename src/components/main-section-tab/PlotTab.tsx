@@ -1,11 +1,13 @@
 import CCGraphEditor from '../../CCGraphEditor';
 import CCGraphListview from '../../CCGraphListview';
 import type { CCGraph } from '../../types/CCGraph';
+import stylesCmn from './common.module.css'
 import styles from './PlotTab.module.css'
 import SvgAutoViewbox from '../ui/SvgAutoViewbox';
 import { TvgToSvg } from '../ui/TvgToSvg';
 import { TvgElementSchema, type TvgElement } from '../../scripts/tiny-vector-graphics/TvgType';
 import z from 'zod';
+import { ProjectNameHeader } from './ProjectNameHeader';
 
 /*
 function saveGraphAsFile(graph: CCGraph, filename: string) {
@@ -35,8 +37,8 @@ export function PlotTabEditor({ ccgraph, activeUuid, dispatch }: {
   }));
 
   return (
-    <div className={styles.container}>
-      <section className={styles.layer_editor}>
+    <div className={stylesCmn.list_and_editor}>
+      <section className={stylesCmn.list_section}>
         <header>
           Graph Layer
         </header>
@@ -68,4 +70,22 @@ export function PlotTabView({ ccgraph }: { ccgraph: CCGraph }) {
       <TvgToSvg tvg={tvg} />
     </SvgAutoViewbox>
   )
+}
+
+export function PlotTab({ ccgraph, activeUuid, dispatch }: {
+  ccgraph: CCGraph,
+  activeUuid: string,
+  dispatch: CallableFunction
+}){
+  return (
+    <>
+      <div className={stylesCmn.editor}>
+        <ProjectNameHeader />
+        <PlotTabEditor ccgraph={ccgraph} activeUuid={activeUuid} dispatch={dispatch} />
+      </div>
+      <div className={`${stylesCmn.view} ${styles.preview}`}>
+        <PlotTabView ccgraph={ccgraph}/>
+      </div>
+    </>
+  );
 }

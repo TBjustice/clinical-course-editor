@@ -4,6 +4,7 @@ import {
   SortableHandle,
 } from '@lumel/react-sortable-hoc';
 import React from 'react';
+import stylesCom from './components/main-section-tab/common.module.css'
 import styles from './components/main-section-tab/PlotTab.module.css'
 
 type CCGraphItemProp = {
@@ -21,7 +22,7 @@ export default function CCGraphListview({ items, activeUuid, dispatch }: { items
     React.forwardRef(({ value, isActive, dispatch }: { value: CCGraphItemProp, isActive: boolean, dispatch: CallableFunction }, ref: React.Ref<HTMLButtonElement> | undefined) => (
       <button
         ref={ref}
-        className={isActive ? `${styles.layer_item} active` : styles.layer_item}
+        className={isActive ? `${stylesCom.list_item} ${styles.list_item} active` :  `${stylesCom.list_item} ${styles.list_item}`}
         onClick={() => {
           dispatch({ type: 'SELECT_ITEM', payload: value.uuid });
         }}>
@@ -33,7 +34,7 @@ export default function CCGraphListview({ items, activeUuid, dispatch }: { items
 
   const ListContainer = SortableContainer<{ items: CCGraphItemProp[], activeUuid: String, dispatch: CallableFunction }>(
     React.forwardRef(({ items }: { items: CCGraphItemProp[] }, ref: React.Ref<HTMLDivElement> | undefined) => (
-      <div ref={ref} className={styles.layer_list}>
+      <div ref={ref}>
         {items.map((value, index) => (
           <ListItem key={value.uuid} index={index} isActive={value.uuid == activeUuid} value={value} dispatch={dispatch} />
         ))}

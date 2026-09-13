@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import 'material-icons/iconfont/material-icons.css';
 import logo from '../assets/logo.svg';
 import styles from './SidebarSection.module.css'
+import { SidebarOpenContext } from "../contexts/AppContexts";
 
 function SidebarTab({ activeTab, setActiveTab }: { activeTab: string, setActiveTab:CallableFunction }) {
   return (
@@ -34,10 +35,14 @@ function SidebarTab({ activeTab, setActiveTab }: { activeTab: string, setActiveT
   )
 }
 
-export default function SidebarSection({open, activeTab, setActiveTab}: {open: boolean, activeTab: string, setActiveTab:CallableFunction}) {
+export default function SidebarSection({activeTab, setActiveTab}: { activeTab: string, setActiveTab:CallableFunction}) {
+  const sidebarOpen = useContext(SidebarOpenContext);
+  if (!sidebarOpen) {
+    throw new Error('SidebarOpenContext must be used within a provider');
+  }
   const [darkmode, setDarkmode] = useState(false);
   return (
-    <section className={open ? styles.sidebar : `${styles.sidebar} close`}>
+    <section className={sidebarOpen.value ? styles.sidebar : `${styles.sidebar} close`}>
       <header className={styles.item}>
         <img src={logo} alt='clicplot' />
         <h1>CliCPlot</h1>
