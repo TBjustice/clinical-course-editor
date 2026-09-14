@@ -67,14 +67,14 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
       </section>
       <section className={styles.section}>
         <header>Height</header>
-        <div className='flexbox'>
+        <div>
           <input
-            type="range" name="ccgraph-height" id="ccgraph-height" className='ccgraph-range'
+            type="range" name="ccgraph-height" className={styles.range}
             min={5} max={200} step={1}
             value={ccgraphItem.height}
             onChange={onGraphHeightChange} />
           <input
-            type="number" className='ccgraph-range'
+            type="number" name="ccgraph-height" className={styles.range}
             value={ccgraphItem.height}
             onChange={onGraphHeightChange} />
         </div>

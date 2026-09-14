@@ -26,10 +26,10 @@ function SidebarTab({ activeTab, setActiveTab }: { activeTab: string, setActiveT
         <span className={styles.text}>Export</span>
       </button>
       <button
-        className={activeTab === 'extension' ? `${styles.item} active` : styles.item}
-        onClick={() => { setActiveTab('extension'); }}>
+        className={activeTab === 'plugin' ? `${styles.item} active` : styles.item}
+        onClick={() => { setActiveTab('plugin'); }}>
         <span className={`material-icons-outlined ${styles.icon}`}>extension</span>
-        <span className={styles.text}>Extension</span>
+        <span className={styles.text}>Plugin</span>
       </button>
     </>
   )

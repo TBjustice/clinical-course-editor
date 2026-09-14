@@ -35,15 +35,11 @@
       min-width: 10rem;
     }
 
-    div.flexbox{
-      display: flex;
-    }
-
-    input.ccgraph-range[type="range"]{
+    input.range[type="range"]{
       min-width: 15rem;
     }
 
-    input.ccgraph-range[type="number"]{
+    input.range[type="number"]{
       width: 4rem;
     }
 

@@ -13,6 +13,8 @@ export default function MainSection({ activeTab, ccgraph, activeUuid, dispatch }
     <section className={styles.main}>
       {(activeTab == 'data') && <DataTab />}
       {(activeTab == 'plot') && <PlotTab ccgraph={ccgraph} activeUuid={activeUuid} dispatch={dispatch}/>}
+      {(activeTab == 'export') && <div className={styles.placeholder}>Export</div>}
+      {(activeTab == 'plugin') && <div className={styles.placeholder}>Plugin</div>}
     </section>
   );
 }
