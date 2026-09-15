@@ -1,0 +1,105 @@
+.header {
+  display: flex;
+  gap: 1rem;
+
+  .ccgraph_name {
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #999;
+    padding: 5px 10px;
+    width: 100%;
+    height: 2rem;
+    font-size: 1.5rem;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.section {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+
+  header {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  select {
+    font-size: 1rem;
+    outline: none;
+    height: 2rem;
+    min-width: 10rem;
+  }
+
+  div.range_wrap {
+    display: flex;
+    align-items: center;
+  }
+
+  input.range[type="range"] {
+    min-width: 15rem;
+  }
+
+  input.range[type="number"] {
+    width: 4rem;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 10rem;
+    resize: none;
+  }
+}
+
+.series_wrap {
+  display: flex;
+  row-gap: 0.5rem;
+  flex-wrap: wrap;
+
+  .series_item {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  .series_item_name {
+    height: 1.6rem;
+    padding: 0 1rem 0 0.5rem;
+    border-radius: 0.8rem 0 0 0.8rem;
+    background-color: var(--accent);
+    color: var(--on-accent);
+    white-space: nowrap;
+  }
+
+  .series_item_delete {
+    height: 1.6rem;
+    padding: 0 0.5rem 0 0.25rem;
+    border-radius: 0 0.8rem 0.8rem 0;
+    border-left: 1px solid var(--border);
+    margin-right: 0.5rem;
+    background-color: var(--accent);
+    color: var(--on-accent);
+
+    &:hover{
+      background-color: var(--accent1);
+    }
+
+    span {
+      color: var(--on-accent);
+    }
+  }
+
+  .series_add{
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 0.8rem;
+    
+    &:hover{
+      background-color: var(--surface2);
+    }
+  }
+}

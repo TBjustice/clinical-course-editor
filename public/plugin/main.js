@@ -1,4 +1,4 @@
-var CliCPlotType = (() => {
+var CliCPlotPlugin = (() => {
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
   var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -17,26 +17,23 @@ var CliCPlotType = (() => {
   };
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // src/scripts/plottype/main.ts
+  // src/scripts/plugin/main.ts
   var main_exports = {};
   __export(main_exports, {
-    addPlotType: () => addPlotType,
-    myTest: () => myTest,
-    plotTypeList: () => plotTypeList
+    addGraphType: () => addGraphType,
+    renderGraph: () => renderGraph
   });
-  var plotTypeList = {};
-  function addPlotType(plotType) {
-    plotTypeList[crypto.randomUUID()] = plotType;
+  var graphTypeList = {};
+  function renderGraph(name, value) {
+    if (name in graphTypeList) {
+      const graphType = graphTypeList[name];
+      return graphType.render(value);
+    } else {
+      return [];
+    }
   }
-  function myTest(a, b) {
-    return {
-      type: "rect",
-      x: a,
-      y: b,
-      width: a + 60,
-      height: 60,
-      stroke: { color: "black", width: 1 }
-    };
+  function addGraphType(graphType) {
+    graphTypeList[graphType.name] = graphType;
   }
   return __toCommonJS(main_exports);
 })();

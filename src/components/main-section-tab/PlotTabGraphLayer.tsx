@@ -1,28 +1,28 @@
+import React from 'react';
+import stylesCmn from './common.module.css'
+import styles from './PlotTab.module.css'
 import {
   SortableContainer,
   SortableElement,
   SortableHandle,
 } from '@lumel/react-sortable-hoc';
-import React from 'react';
-import stylesCom from './components/main-section-tab/common.module.css'
-import styles from './components/main-section-tab/PlotTab.module.css'
 
-type CCGraphItemProp = {
+type GraphLayerItemProp = {
   uuid: string,
   name: string
 }
 
-export default function CCGraphListview({ items, activeUuid, dispatch }: { items: CCGraphItemProp[], activeUuid: string, dispatch: CallableFunction }) {
+export default function GraphLayerList({ items, activeUuid, dispatch }: { items: GraphLayerItemProp[], activeUuid: string, dispatch: CallableFunction }) {
 
   const DragHandle = SortableHandle(React.forwardRef(({ }, ref: React.Ref<HTMLSpanElement> | undefined) => (
     <span ref={ref} className={`material-icons-outlined ${styles.layer_item_drag}`}>drag_indicator</span>
   )));
 
-  const ListItem = SortableElement<{ value: CCGraphItemProp, isActive: boolean, dispatch: CallableFunction }>(
-    React.forwardRef(({ value, isActive, dispatch }: { value: CCGraphItemProp, isActive: boolean, dispatch: CallableFunction }, ref: React.Ref<HTMLButtonElement> | undefined) => (
+  const ListItem = SortableElement<{ value: GraphLayerItemProp, isActive: boolean, dispatch: CallableFunction }>(
+    React.forwardRef(({ value, isActive, dispatch }: { value: GraphLayerItemProp, isActive: boolean, dispatch: CallableFunction }, ref: React.Ref<HTMLButtonElement> | undefined) => (
       <button
         ref={ref}
-        className={isActive ? `${stylesCom.list_item} ${styles.list_item} active` :  `${stylesCom.list_item} ${styles.list_item}`}
+        className={isActive ? `${stylesCmn.list_item} ${styles.list_item} active` : `${stylesCmn.list_item} ${styles.list_item}`}
         onClick={() => {
           dispatch({ type: 'SELECT_ITEM', payload: value.uuid });
         }}>
@@ -32,8 +32,8 @@ export default function CCGraphListview({ items, activeUuid, dispatch }: { items
     )),
   );
 
-  const ListContainer = SortableContainer<{ items: CCGraphItemProp[], activeUuid: String, dispatch: CallableFunction }>(
-    React.forwardRef(({ items }: { items: CCGraphItemProp[] }, ref: React.Ref<HTMLDivElement> | undefined) => (
+  const ListContainer = SortableContainer<{ items: GraphLayerItemProp[], activeUuid: String, dispatch: CallableFunction }>(
+    React.forwardRef(({ items }: { items: GraphLayerItemProp[] }, ref: React.Ref<HTMLDivElement> | undefined) => (
       <div ref={ref}>
         {items.map((value, index) => (
           <ListItem key={value.uuid} index={index} isActive={value.uuid == activeUuid} value={value} dispatch={dispatch} />
@@ -46,8 +46,6 @@ export default function CCGraphListview({ items, activeUuid, dispatch }: { items
     { oldIndex, newIndex }: { oldIndex: number, newIndex: number }) => {
     dispatch({ type: 'LIST_MOVE_ITEM', payload: { oldIndex, newIndex } });
   };
-
-
 
   function addGraph() {
     dispatch({

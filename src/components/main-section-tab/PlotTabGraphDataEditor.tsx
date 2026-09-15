@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import styles from './CCGraphEditor.module.css'
-import type { CCGraphItem } from './types/CCGraph.ts';
-import Dialog  from './components/ui/Dialog .tsx';
+import styles from './PlotTabGraphDataEditor.module.css'
+import type { CCGraphItem } from '../../types/CCGraph.ts';
+import Dialog from '../ui/Dialog .tsx';
 
-export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: string, ccgraphItem: CCGraphItem, dispatch: CallableFunction }) {
+export default function GraphData({ uuid, ccgraphItem, dispatch }: { uuid: string, ccgraphItem: CCGraphItem, dispatch: CallableFunction }) {
   const [isDeleteDialogOpened, setDeleteDialogOpened] = useState(false);
-  
+
   function onGraphNameChange(event: React.ChangeEvent<HTMLInputElement>) {
     dispatch({
       type: 'SET_ITEM',
@@ -57,17 +57,8 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
         </button>
       </header>
       <section className={styles.section}>
-        <header>Type</header>
-        <select name='ccgraph-type' id='ccgraph-type' className='ccgraph-type' value={ccgraphItem.type} onChange={onGraphTypeChange}>
-          <option>-----</option>
-          <option value='line'>Line</option>
-          <option value='step-area'>StepArea</option>
-          <option value='timing'>Timing</option>
-        </select>
-      </section>
-      <section className={styles.section}>
         <header>Height</header>
-        <div>
+        <div className={styles.range_wrap}>
           <input
             type="range" name="ccgraph-height" className={styles.range}
             min={5} max={200} step={1}
@@ -80,6 +71,71 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
         </div>
       </section>
       <section className={styles.section}>
+        <header>Series</header>
+        <div className={styles.series_wrap}>
+          <div className={styles.series_item}>
+            <div className={styles.series_item_name}>
+              <span>AST</span>
+            </div>
+            <button className={styles.series_item_delete}>
+              <span className={'material-icons-outlined'}>clear</span>
+            </button>
+          </div>
+          <div className={styles.series_item}>
+            <div className={styles.series_item_name}>
+              <span>ALT</span>
+            </div>
+            <button className={styles.series_item_delete}>
+              <span className={'material-icons-outlined'}>clear</span>
+            </button>
+          </div>
+          <div className={styles.series_item}>
+            <div className={styles.series_item_name}>
+              <span>γ-GT</span>
+            </div>
+            <button className={styles.series_item_delete}>
+              <span className={'material-icons-outlined'}>clear</span>
+            </button>
+          </div>
+          <div className={styles.series_item}>
+            <div className={styles.series_item_name}>
+              <span>ALB</span>
+            </div>
+            <button className={styles.series_item_delete}>
+              <span className={'material-icons-outlined'}>clear</span>
+            </button>
+          </div>
+          <div className={styles.series_item}>
+            <div className={styles.series_item_name}>
+              <span>CRE</span>
+            </div>
+            <button className={styles.series_item_delete}>
+              <span className={'material-icons-outlined'}>clear</span>
+            </button>
+          </div>
+          <div className={styles.series_item}>
+            <div className={styles.series_item_name}>
+              <span>BUN</span>
+            </div>
+            <button className={styles.series_item_delete}>
+              <span className={'material-icons-outlined'}>clear</span>
+            </button>
+          </div>
+          <button className={styles.series_add}>
+            <span className='material-icons-outlined'>add</span>
+          </button>
+        </div>
+      </section>
+      <section className={styles.section}>
+        <header>Type</header>
+        <select name='ccgraph-type' id='ccgraph-type' className='ccgraph-type' value={ccgraphItem.type} onChange={onGraphTypeChange}>
+          <option>-----</option>
+          <option value='line'>Line</option>
+          <option value='step-area'>StepArea</option>
+          <option value='timing'>Timing</option>
+        </select>
+      </section>
+      <section className={styles.section}>
         <header>Table</header>
         <textarea
           name='ccgraph-table' id='ccgraph-table'
@@ -87,7 +143,7 @@ export default function CCGraphEditor({ uuid, ccgraphItem, dispatch }: { uuid: s
           onChange={onGraphDataChange}></textarea>
       </section>
 
-      <Dialog 
+      <Dialog
         isOpen={isDeleteDialogOpened}
         onCancelDialog={() => {
           setDeleteDialogOpened(false);

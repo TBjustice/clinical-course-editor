@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "plottype":"npx esbuild src/scripts/plottype/main.ts --bundle --format=iife --global-name=CliCPlotType --outfile=public/plottype.js",
+    "plugin":"npx esbuild ./src/scripts/plugin/main.ts --bundle --format=iife --global-name=CliCPlotPlugin --outfile=public/plugin/main.js",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
