@@ -1,0 +1,10 @@
+.select{
+  font-size: 1rem;
+  height: 2rem;
+  width: 12rem;
+}
+
+.item_name{
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}

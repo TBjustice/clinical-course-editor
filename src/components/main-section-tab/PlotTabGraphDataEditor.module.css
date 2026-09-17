@@ -97,6 +97,7 @@
     width: 1.6rem;
     height: 1.6rem;
     border-radius: 0.8rem;
+    color: var(--text-h);
     
     &:hover{
       background-color: var(--surface2);

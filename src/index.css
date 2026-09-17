@@ -46,6 +46,18 @@
   --surface2: #1d1f1e;
 }
 
+:root:lang(jp) {
+  .lang-en {
+    display: none !important;
+  }
+}
+
+:root:lang(en) {
+  .lang-jp {
+    display: none !important;
+  }
+}
+
 *,
 *::after,
 *::before {

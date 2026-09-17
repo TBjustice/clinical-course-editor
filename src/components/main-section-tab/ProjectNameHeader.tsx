@@ -30,13 +30,15 @@ export function ProjectNameHeader({ }: {}) {
           className='has-tooltip'
           onClick={() => { setRenameDialogOpen(true); }}>
           <span className='material-icons-outlined'>edit</span>
-          <div className='tooltip-right tooltip'>Rename Project</div>
+          <div className='tooltip-right tooltip lang-en'>Rename Project</div>
+          <div className='tooltip-right tooltip lang-jp'>プロジェクト名の変更</div>
         </button>
         <button
           className='has-tooltip'
           onClick={() => { setSaveAsDialogOpen(true); }}>
           <span className='material-icons-outlined'>save_as</span>
-          <div className='tooltip-right tooltip'>Save As</div>
+          <div className='tooltip-right tooltip lang-en'>Save As</div>
+          <div className='tooltip-right tooltip lang-jp'>名前を付けて保存</div>
         </button>
       </menu>
 
@@ -45,7 +47,10 @@ export function ProjectNameHeader({ }: {}) {
         onCancelDialog={() => {
           setRenameDialogOpen(false);
         }}>
-        <header>Rename this Project</header>
+        <header>
+          <span className='lang-en'>Rename this Project</span>
+          <span className='lang-jp'>プロジェクト名を変更</span>
+        </header>
         <input
           type='text' id='rename-dialog-input' value={namingText}
           onChange={(event) => { setNamingText(event.target.value); }} autoFocus />
@@ -67,7 +72,10 @@ export function ProjectNameHeader({ }: {}) {
         onCancelDialog={() => {
           setSaveAsDialogOpen(false);
         }}>
-        <header>Rename this Project</header>
+        <header>
+          <span className='lang-en'>Save As</span>
+          <span className='lang-jp'>名前を付けて保存</span>
+        </header>
         <input
           type='text' id='saveas-dialog-input' value={namingText}
           onChange={(event) => { setNamingText(event.target.value); }}

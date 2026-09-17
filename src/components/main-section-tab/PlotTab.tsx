@@ -24,11 +24,12 @@ export function PlotTabEditor({ ccgraph, activeUuid, dispatch }: {
     <div className={stylesCmn.list_and_editor}>
       <section className={stylesCmn.list_section}>
         <header>
-          Graph Layer
+          <span className='lang-en'>Graph Layer</span>
+          <span className='lang-jp'>グラフレイヤー</span>
         </header>
         <GraphLayerList items={ccgraphListProp} activeUuid={activeUuid} dispatch={dispatch} />
       </section>
-      <section className={styles.editor}>
+      <section className={`${stylesCmn.editor_section} ${styles.editor}`}>
         {activeUuid.length > 0 && (
           <GraphDataEditor
             uuid={activeUuid}

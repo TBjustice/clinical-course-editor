@@ -15,7 +15,8 @@ function DataTabEditor({ tables }: { tables: string[] }) {
     <div className={stylesCmn.list_and_editor}>
       <section className={stylesCmn.list_section}>
         <header>
-          Table List
+          <span className='lang-en'>Table List</span>
+          <span className='lang-jp'>テーブルリスト</span>
         </header>
         <div>
           {tables.map((item, index) => (
@@ -32,10 +33,11 @@ function DataTabEditor({ tables }: { tables: string[] }) {
           className={`${styles.add_button} has-tooltip`}
           onClick={addTable}>
           <span className={`material-icons-outlined`}>add</span>
-          <span className='tooltip tooltip-right'>Add new table</span>
+          <span className='tooltip tooltip-right lang-en'>Add new table</span>
+          <span className='tooltip tooltip-right lang-jp'>テーブルを追加</span>
         </button>
       </section>
-      <section>
+      <section className={stylesCmn.editor_section}>
 
       </section>
     </div>

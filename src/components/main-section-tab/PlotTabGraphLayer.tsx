@@ -61,7 +61,8 @@ export default function GraphLayerList({ items, activeUuid, dispatch }: { items:
         className={`${styles.add_button} has-tooltip`}
         onClick={addGraph}>
         <span className={`material-icons-outlined`}>add</span>
-        <span className='tooltip tooltip-right'>Add new layer</span>
+        <span className='tooltip tooltip-right lang-en'>Add new layer</span>
+        <span className='tooltip tooltip-right lang-jp'>レイヤーを追加</span>
       </button>
     </>
   );

@@ -71,6 +71,10 @@ export default function GraphData({ uuid, ccgraphItem, dispatch }: { uuid: strin
         </div>
       </section>
       <section className={styles.section}>
+        <header>Scales</header>
+
+      </section>
+      <section className={styles.section}>
         <header>Series</header>
         <div className={styles.series_wrap}>
           <div className={styles.series_item}>
@@ -148,8 +152,14 @@ export default function GraphData({ uuid, ccgraphItem, dispatch }: { uuid: strin
         onCancelDialog={() => {
           setDeleteDialogOpened(false);
         }}>
-        <header>Do you really want to delete this layer?</header>
-        <p>All the content (including parameters and data) are deleted permanently.</p>
+        <header>
+          <span className='lang-en'>Do you really want to delete this layer?</span>
+          <span className='lang-jp'>本当にこのレイヤーを削除しても良いですか?</span>
+        </header>
+        <p>
+          <span className='lang-en'>All the content are deleted permanently.</span>
+          <span className='lang-jp'>内容は完全に消去されます。</span>
+        </p>
         <menu>
           <button
             onClick={() => {

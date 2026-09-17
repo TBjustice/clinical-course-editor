@@ -26,8 +26,18 @@ button {
   margin: 0;
 
   &:focus-visible {
-    outline: 2px solid var(--text);
-    outline-offset: -3px;
+    outline: 2px solid var(--text) !important;
+    outline-offset: -3px !important;
+  }
+}
+
+select {
+  background: var(--bg);
+  color: var(--text-h);
+
+  &:focus-visible {
+    outline: 2px solid var(--text) !important;
+    outline-offset: -3px !important;
   }
 }
 

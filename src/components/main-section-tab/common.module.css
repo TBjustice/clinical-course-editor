@@ -37,6 +37,10 @@
     }
   }
 
+  .editor_section{
+    flex: 1;
+  }
+
 }
 
 button.list_item {
