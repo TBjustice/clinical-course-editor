@@ -4,7 +4,11 @@ import styles from './DataTab.module.css'
 import stylesCmn from './common.module.css'
 import { ProjectNameHeader } from './ProjectNameHeader';
 
-function DataTabEditor({ tables }: { tables: string[] }) {
+type TableHeaderEvent =
+  | { action: 'ADD_HEADER' }
+  | { action: 'RENAME_HEADER', payload: { index: number, value: string } }
+
+function DataTabEditor({ tables, tableHeader, tableHeaderEventHandler }: { tables: string[], tableHeader: string[], tableHeaderEventHandler: (e: TableHeaderEvent) => void }) {
   const [activeIndex, setActiveIndex] = useState(-1);
 
   function addTable() {
@@ -37,8 +41,34 @@ function DataTabEditor({ tables }: { tables: string[] }) {
           <span className='tooltip tooltip-right lang-jp'>テーブルを追加</span>
         </button>
       </section>
-      <section className={stylesCmn.editor_section}>
-
+      <section className={`${stylesCmn.editor_section} ${styles.header_edit_wrap}`}>
+        {tableHeader.map((value, idx) => {
+          return (
+            <section key={idx}>
+              <header className={styles.header_edit_name}>
+                <input
+                  type="text" value={value}
+                  onChange={(event) => {
+                    tableHeaderEventHandler({
+                      action: 'RENAME_HEADER',
+                      payload: { index: idx, value: event.target.value }
+                    });
+                  }} />
+                <button className={styles.delete_button}>
+                  <span className="material-icons-outlined">delete_forever</span>
+                </button>
+              </header>
+            </section>
+          );
+        })}
+        <button
+          onClick={() => {
+            tableHeaderEventHandler({
+              action: 'ADD_HEADER'
+            });
+          }}>
+          Add Table
+        </button>
       </section>
     </div>
   );
@@ -61,11 +91,31 @@ export function DataTab() {
       ['2026/1/5', '36', '23', '0.5']]
   });
 
+  function tableHeaderEventHandler(tableEvent: TableHeaderEvent) {
+    const original = stateTableData[0];
+    switch (tableEvent.action) {
+      case 'ADD_HEADER':
+        stateTableData[1]({
+          header: [...original.header, 'Untitled'],
+          data: original.data.map((item) => [...item, ''])
+        });
+        break;
+      case 'RENAME_HEADER':
+        stateTableData[1]({
+          ...original,
+          header: original.header.map((item, idx) => (
+            (idx - 1) === tableEvent.payload.index ? tableEvent.payload.value : item
+          ))
+        });
+        break;
+    }
+  }
+
   return (
     <>
       <div className={stylesCmn.editor}>
         <ProjectNameHeader />
-        <DataTabEditor tables={['table 1', 'table 2']} />
+        <DataTabEditor tables={['table 1', 'table 2']} tableHeader={stateTableData[0].header.slice(1)} tableHeaderEventHandler={tableHeaderEventHandler} />
       </div>
       <div className={stylesCmn.view}>
         <DataTabView stateTableData={stateTableData} />

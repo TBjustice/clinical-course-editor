@@ -7,11 +7,6 @@
     border: 1px solid var(--border);
     height: 2rem;
 
-    div {
-      min-width: 5rem;
-      min-height: 1rem;
-    }
-
     &:global(.active) {
       outline: 3px solid var(--text-h);
       outline-offset: -3px;
@@ -37,6 +32,8 @@
 }
 
 .tbody {
+  color: var(--text-h);
+
   th {
     text-align: left;
   }
@@ -62,4 +59,16 @@
 
 .active_cell {
   display: flex;
+}
+
+.prefix {
+  opacity: 0.5;
+}
+
+.suffix {
+  opacity: 0.5;
+}
+
+.error{
+  color: red;
 }

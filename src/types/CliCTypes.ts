@@ -2,13 +2,12 @@ import * as z from "zod";
 
 export const CliCTableSchema = z.object({
   name: z.string(),
-  type: z.literal('table'),
-  header: z.array(z.iso.datetime()),
-  index: z.array(z.string()),
-  data: z.array(z.array(z.union([z.number(), z.string(), z.null()])))
+  header: z.array(z.string()),
+  datetime: z.array(z.string()),
+  data: z.array(z.array(z.string()))
 }).superRefine((val, ctx) => {
   const headerLength = val.header.length;
-  const keyLength = val.index.length;
+  const keyLength = val.datetime.length;
   if (val.data.length != headerLength) {
     ctx.addIssue({
       code: 'custom',
@@ -34,13 +33,14 @@ export const CliCPlotSchema = z.object({
 });
 
 export const CliCLayerSchema = z.object({
-  charts: z.array(CliCPlotSchema),
+  name: z.string(),
+  plotList: z.array(CliCPlotSchema),
   height: z.number()
 });
 
 export const CliCFigureSchema = z.object({
   width: z.number(),
-  dateRange: z.array(z.iso.datetime()).length(2),
+  dateRange: z.array(z.string()).length(2),
   layerList: z.array(CliCLayerSchema)
 });
 

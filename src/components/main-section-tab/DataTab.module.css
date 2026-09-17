@@ -25,3 +25,25 @@
     background: var(--surface1);
   }
 }
+
+.header_edit_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.header_edit_name {
+  display: flex;
+  gap: 0.5rem;
+  input {
+    flex: 1;
+    outline: none;
+    font-size: 1.5rem;
+    height: 2rem;
+    border: none;
+    border-bottom: 2px solid var(--border);
+  }
+  .delete_button{
+    color: red;
+  }
+}

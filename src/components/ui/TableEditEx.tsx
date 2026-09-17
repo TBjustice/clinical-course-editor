@@ -1,9 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './TableEdit.module.css'
 
-export type TableData = {
+export type TableExItem = {
+  prefix: string,
+  value: string,
+  suffix: string,
+  isErr: boolean
+}
+
+export type TableExData = {
   header: string[],
-  data: string[][]
+  data: TableExItem[][]
 }
 
 type CellMode = 'NONE' | 'FOCUS' | 'INPUT' | 'EDIT';
@@ -24,8 +31,8 @@ type TableAction =
 
 type TableEventFunction = (action: TableAction) => void;
 
-function ActiveCell({ value, mode, tableEventFunction }: {
-  value: string,
+function ActiveCell({ item, mode, tableEventFunction }: {
+  item: TableExItem,
   mode: CellMode
   tableEventFunction: TableEventFunction
 }) {
@@ -42,7 +49,7 @@ function ActiveCell({ value, mode, tableEventFunction }: {
     case 'EDIT':
       return (
         <input
-          value={value}
+          value={item.value}
           name='table-input'
           onKeyDown={(event) => {
             switch (event.key) {
@@ -75,7 +82,7 @@ function ActiveCell({ value, mode, tableEventFunction }: {
     case 'INPUT':
       return (
         <input
-          value={value}
+          value={item.value}
           name='table-input'
           onKeyDown={(event) => {
             switch (event.key) {
@@ -105,7 +112,7 @@ function ActiveCell({ value, mode, tableEventFunction }: {
     case 'FOCUS':
       return (
         <div className={styles.active_cell}>
-          <span>{value}</span>
+          <span>{item.value}</span>
           <input
             value={''}
             name='table-input'
@@ -146,19 +153,19 @@ function ActiveCell({ value, mode, tableEventFunction }: {
         </div>
       );
     default:
-      return (<>{value}</>);
+      return (<>{item.value}</>);
   }
 }
 
 function TableRow({ row, rowIdx, activeCellState, tableEventFunction }: {
-  row: string[],
+  row: TableExItem[],
   rowIdx: number,
   activeCellState: ActiveCellState,
   tableEventFunction: TableEventFunction
 }) {
   return (
     <tr>
-      {row.map((value, colIdx) => {
+      {row.map((item, colIdx) => {
         const isActive = (rowIdx == activeCellState.row && colIdx == activeCellState.col);
         return (
           <td
@@ -167,11 +174,15 @@ function TableRow({ row, rowIdx, activeCellState, tableEventFunction }: {
             data-row={rowIdx} data-col={colIdx}>
             {isActive ? (
               <ActiveCell
-                value={value}
+                item={item}
                 mode={activeCellState.mode}
                 tableEventFunction={tableEventFunction} />
             ) : (
-              <>{value}</>
+              <>
+                <span className={styles.prefix}>{item.prefix}</span>
+                <span className={item.isErr ? styles.error : ''}>{item.value}</span>
+                <span className={styles.suffix}>{item.suffix}</span>
+              </>
             )}
           </td>);
       })}
@@ -179,7 +190,7 @@ function TableRow({ row, rowIdx, activeCellState, tableEventFunction }: {
   );
 }
 
-export default function TableEdit({ stateTableData }: { stateTableData: [TableData, CallableFunction] }) {
+export default function TableEditEx({ stateTableData }: { stateTableData: [TableExData, CallableFunction] }) {
   const tableRef = useRef<HTMLTableElement>(null);
   const [activeCellState, setActiveCell] = useState<ActiveCellState>({ row: -1, col: -1, mode: 'FOCUS' });
   const tableData = stateTableData[0];
@@ -211,8 +222,8 @@ export default function TableEdit({ stateTableData }: { stateTableData: [TableDa
   function onSetValue(newValue: string) {
     if (activeCellState.row == data.length) {
       const newData = [...tableData.data];
-      newData.push(Array(header.length).fill(''));
-      newData[activeCellState.row][activeCellState.col] = newValue;
+      newData.push(Array(header.length).fill({prefix:'', value: '', suffix:'', isErr: false}));
+      newData[activeCellState.row][activeCellState.col].value = newValue;
       setTableData({
         ...tableData,
         data: newData

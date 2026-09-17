@@ -2,6 +2,8 @@ import type { CCGraph } from '../types/CCGraph';
 import { DataTab } from './main-section-tab/DataTab';
 import styles from './MainSection.module.css'
 import { PlotTab } from './main-section-tab/PlotTab';
+import { useState } from 'react';
+import { type CliCProject } from '../types/CliCTypes';
 
 export default function MainSection({ activeTab, ccgraph, activeUuid, dispatch }: {
   activeTab: string,
