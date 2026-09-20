@@ -1,3 +1,7 @@
+.view{
+  overflow: auto;
+}
+
 .list_item {
   color: var(--text);
 
@@ -26,16 +30,11 @@
   }
 }
 
-.header_edit_wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.header_edit_name {
+.table_name {
   display: flex;
   gap: 0.5rem;
-  input {
+  margin-bottom: 1rem;
+  input{
     flex: 1;
     outline: none;
     font-size: 1.5rem;
@@ -43,7 +42,32 @@
     border: none;
     border-bottom: 2px solid var(--border);
   }
-  .delete_button{
-    color: red;
+}
+
+.header_edit_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.header_edit_name {
+  display: flex;
+  gap: 0.5rem;
+
+  .header_name {
+    flex: 1;
+    font-size: 1.5rem;
   }
+}
+
+.delete_button {
+  color: red;
+}
+
+.add_column_button{
+  padding: 0.5rem;
+  width: fit-content;
+  color: var(--accent);
+  font-weight: bold;
+  font-size: 1rem;
 }

@@ -4,7 +4,7 @@ export const CliCTableSchema = z.object({
   name: z.string(),
   header: z.array(z.string()),
   datetime: z.array(z.string()),
-  data: z.array(z.array(z.string()))
+  data: z.array(z.array(z.union([z.string(), z.number(), z.null()])))
 }).superRefine((val, ctx) => {
   const headerLength = val.header.length;
   const keyLength = val.datetime.length;
@@ -38,11 +38,15 @@ export const CliCLayerSchema = z.object({
   height: z.number()
 });
 
+export type CliCLayer = z.infer<typeof CliCLayerSchema>;
+
 export const CliCFigureSchema = z.object({
   width: z.number(),
   dateRange: z.array(z.string()).length(2),
   layerList: z.array(CliCLayerSchema)
 });
+
+export type CliCFigure = z.infer<typeof CliCFigureSchema>;
 
 export const CliCProjectSchema = z.object({
   dataList: z.array(CliCTableSchema),

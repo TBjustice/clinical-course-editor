@@ -3,7 +3,9 @@ import { DataTab } from './main-section-tab/DataTab';
 import styles from './MainSection.module.css'
 import { PlotTab } from './main-section-tab/PlotTab';
 import { useState } from 'react';
-import { type CliCProject } from '../types/CliCTypes';
+import { type CliCTable } from '../types/CliCTypes';
+import { ProjectDataContext } from '../contexts/ProjectContexts';
+import * as SAMPLE1 from '../samples/sample1.json'
 
 export default function MainSection({ activeTab, ccgraph, activeUuid, dispatch }: {
   activeTab: string,
@@ -11,12 +13,15 @@ export default function MainSection({ activeTab, ccgraph, activeUuid, dispatch }
   activeUuid: string,
   dispatch: CallableFunction
 }) {
+  const [dataList, setDataList] = useState<CliCTable[]>(SAMPLE1.dataList);
   return (
-    <section className={styles.main}>
-      {(activeTab == 'data') && <DataTab />}
-      {(activeTab == 'plot') && <PlotTab ccgraph={ccgraph} activeUuid={activeUuid} dispatch={dispatch}/>}
-      {(activeTab == 'export') && <div className={styles.placeholder}>Export</div>}
-      {(activeTab == 'plugin') && <div className={styles.placeholder}>Plugin</div>}
-    </section>
+    <ProjectDataContext value={{value: dataList, setValue: setDataList}}>
+      <section className={styles.main}>
+        {(activeTab == 'data') && <DataTab />}
+        {(activeTab == 'plot') && <PlotTab ccgraph={ccgraph} activeUuid={activeUuid} dispatch={dispatch} />}
+        {(activeTab == 'export') && <div className={styles.placeholder}>Export</div>}
+        {(activeTab == 'plugin') && <div className={styles.placeholder}>Plugin</div>}
+      </section>
+    </ProjectDataContext>
   );
 }

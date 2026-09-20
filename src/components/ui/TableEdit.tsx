@@ -179,11 +179,9 @@ function TableRow({ row, rowIdx, activeCellState, tableEventFunction }: {
   );
 }
 
-export default function TableEdit({ stateTableData }: { stateTableData: [TableData, CallableFunction] }) {
+export default function TableEdit({ tableData, setTableData }: { tableData: TableData, setTableData: (value: TableData)=>void }) {
   const tableRef = useRef<HTMLTableElement>(null);
   const [activeCellState, setActiveCell] = useState<ActiveCellState>({ row: -1, col: -1, mode: 'FOCUS' });
-  const tableData = stateTableData[0];
-  const setTableData = stateTableData[1];
   const header = tableData.header;
   const data = tableData.data;
 

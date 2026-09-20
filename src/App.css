@@ -53,7 +53,7 @@ select {
   transition-delay: 0s;
 }
 
-.has-tooltip:hover .tooltip-right {
+.has-tooltip:hover .tooltip {
   visibility: visible;
   opacity: 1;
   transition-duration: 0.5s;
@@ -67,6 +67,25 @@ select {
   left: 102%;
   clip-path: polygon(0 50%, 0.5rem 0, 100% 0, 100% 100%, 0.5rem 100%);
   padding: 0.25rem 0.25rem 0.25rem 0.5rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  z-index: 100;
+  white-space: nowrap;
+}
+
+.tooltip-left {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 102%;
+  clip-path: shape(
+    from 0 0,
+    line to calc(100% - 0.5rem) 0,
+    line to 100% 50%,
+    line to calc(100% - 0.5rem) 100%,
+    line to 0 100%,
+    close);
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
   background: var(--accent);
   color: var(--on-accent);
   z-index: 100;

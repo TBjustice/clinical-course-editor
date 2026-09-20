@@ -1,18 +1,68 @@
-import { useState } from 'react';
+import { useContext, useState, type Dispatch, type SetStateAction } from 'react';
 import TableEdit, { type TableData } from '../ui/TableEdit';
 import styles from './DataTab.module.css'
 import stylesCmn from './common.module.css'
 import { ProjectNameHeader } from './ProjectNameHeader';
+import { ProjectDataContext } from '../../contexts/ProjectContexts';
+import type { CliCTable } from '../../types/CliCTypes';
+import Dialog from '../ui/Dialog ';
 
-type TableHeaderEvent =
-  | { action: 'ADD_HEADER' }
-  | { action: 'RENAME_HEADER', payload: { index: number, value: string } }
+function DataTabEditor({ activeIndex, setActiveIndex }: { activeIndex: number, setActiveIndex: Dispatch<SetStateAction<number>> }) {
+  const projectData = useContext(ProjectDataContext);
+  if (!projectData) {
+    throw new Error('ProjectData must be used within a provider');
+  }
+  const [renameDialogIndex, setRenameDialogIndex] = useState(-1);
+  const [renamingText, setRenamingText] = useState('');
 
-function DataTabEditor({ tables, tableHeader, tableHeaderEventHandler }: { tables: string[], tableHeader: string[], tableHeaderEventHandler: (e: TableHeaderEvent) => void }) {
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const tables = projectData.value.map((item) => item.name);
+  const activeTable = activeIndex < 0 ? undefined : projectData.value[activeIndex];
 
   function addTable() {
+    if (!projectData) return;
+    projectData.setValue([
+      ...projectData.value,
+      {
+        name: 'Untitled Table',
+        header: [],
+        datetime: [],
+        data: []
+      }
+    ]);
+  }
 
+  function updateActiveTable(table: CliCTable) {
+    if (!projectData) return;
+    projectData.setValue(projectData.value.map((item, index) => {
+      if (index == activeIndex) {
+        return table;
+      }
+      return item;
+    }))
+  }
+
+  function addColumn(active: CliCTable) {
+    updateActiveTable({
+      ...active,
+      header: [...active.header, 'Untitled'],
+      data: active.data.map((item) => [...item, ''])
+    });
+  }
+
+  function renameTable(active: CliCTable, name: string) {
+    updateActiveTable({
+      ...active,
+      name: name
+    });
+  }
+
+  function renameHeader(active: CliCTable, index: number, name: string) {
+    updateActiveTable({
+      ...active,
+      header: active.header.map((item, idx) => (
+        idx === index ? name : item
+      ))
+    });
   }
 
   return (
@@ -41,84 +91,126 @@ function DataTabEditor({ tables, tableHeader, tableHeaderEventHandler }: { table
           <span className='tooltip tooltip-right lang-jp'>テーブルを追加</span>
         </button>
       </section>
-      <section className={`${stylesCmn.editor_section} ${styles.header_edit_wrap}`}>
-        {tableHeader.map((value, idx) => {
-          return (
-            <section key={idx}>
-              <header className={styles.header_edit_name}>
-                <input
-                  type="text" value={value}
-                  onChange={(event) => {
-                    tableHeaderEventHandler({
-                      action: 'RENAME_HEADER',
-                      payload: { index: idx, value: event.target.value }
-                    });
-                  }} />
-                <button className={styles.delete_button}>
-                  <span className="material-icons-outlined">delete_forever</span>
-                </button>
-              </header>
-            </section>
-          );
-        })}
-        <button
-          onClick={() => {
-            tableHeaderEventHandler({
-              action: 'ADD_HEADER'
-            });
-          }}>
-          Add Table
-        </button>
-      </section>
+      {activeTable && (
+        <section className={stylesCmn.editor_section}>
+          <header className={styles.table_name}>
+            <input
+              type="text" value={activeTable.name}
+              onChange={(event) => {
+                renameTable(activeTable, event.target.value)
+              }} />
+            <button className={styles.delete_button}>
+              <span className="material-icons-outlined">delete_forever</span>
+            </button>
+          </header>
+          <div className={styles.header_edit_wrap}>
+            {activeTable.header.map((value, idx) => {
+              return (
+                <section key={idx}>
+                  <header className={styles.header_edit_name}>
+                    <div className={styles.header_name}>{value}</div>
+                    <button
+                      className="has-tooltip"
+                      onClick={() => {
+                        setRenamingText(value);
+                        setRenameDialogIndex(idx);
+                      }}>
+                      <span className="material-icons-outlined">edit</span>
+                      <div className="tooltip-left tooltip lang-en">Rename Column</div>
+                      <div className="tooltip-left tooltip lang-jp">行の名前を変更</div>
+                    </button>
+                    <button className={styles.delete_button}>
+                      <span className="material-icons-outlined">delete_forever</span>
+                    </button>
+                  </header>
+                </section>
+              );
+            })}
+            <button
+              className={styles.add_column_button}
+              onClick={() => { addColumn(activeTable) }}>
+              <span className='lang-en'>Add Column</span>
+              <span className='lang-jp'>行を追加</span>
+            </button>
+          </div>
+          <Dialog
+            isOpen={renameDialogIndex >= 0}
+            onCancelDialog={() => { setRenameDialogIndex(-1); }}>
+            <header>
+              <span className='lang-en'>Rename Column</span>
+              <span className='lang-jp'>行の名前を変更</span>
+            </header>
+            <input
+              type="text" name='rename-column-dialog' value={renamingText}
+              onChange={(event) => { setRenamingText(event.target.value); }} />
+            <menu>
+              <button onClick={() => { setRenameDialogIndex(-1); }}>Cancel</button>
+              <button
+                onClick={() => {
+                  renameHeader(activeTable, renameDialogIndex, renamingText);
+                  setRenameDialogIndex(-1);
+                }}>
+                OK
+              </button>
+            </menu>
+          </Dialog>
+        </section>
+      )}
     </div>
   );
 }
 
-function DataTabView({ stateTableData }: {
-  stateTableData: [TableData, CallableFunction]
-}) {
+function DataTabView({ activeIndex }: { activeIndex: number }) {
+  const projectData = useContext(ProjectDataContext);
+  if (!projectData) {
+    throw new Error('ProjectData must be used within a provider');
+  }
+  const activeTable = activeIndex < 0 ? undefined : projectData.value[activeIndex];
+
+  if (!activeTable) return (<></>);
+
+  const tableData: TableData = {
+    header: ['Date', ...activeTable.header],
+    data: []
+  };
+  for (let i = 0; i < activeTable.datetime.length; ++i) {
+    const row = [activeTable.datetime[i]];
+    activeTable.data[i].forEach((item) => {
+      row.push(item === null ? '' : String(item));
+    })
+    tableData.data.push(row);
+  }
+
+  function setTableData(value: TableData) {
+    if (!projectData) return;
+    projectData.setValue(
+      projectData.value.map((item, index) => {
+        if (index != activeIndex) return item;
+        return {
+          ...item,
+          datetime: value.data.map((row) => row[0]),
+          data: value.data.map((row) => row.slice(1))
+        };
+      })
+    );
+  }
+
   return (
-    <TableEdit stateTableData={stateTableData} />
+    <TableEdit tableData={tableData} setTableData={setTableData} />
   );
 }
 
 export function DataTab() {
-  const stateTableData = useState<TableData>({
-    header: ['Date', 'label1', 'label2', 'label3'],
-    data: [
-      ['2026/1/1', '24', '25', '0.3'],
-      ['2026/1/3', '32', '28', '0.2'],
-      ['2026/1/5', '36', '23', '0.5']]
-  });
-
-  function tableHeaderEventHandler(tableEvent: TableHeaderEvent) {
-    const original = stateTableData[0];
-    switch (tableEvent.action) {
-      case 'ADD_HEADER':
-        stateTableData[1]({
-          header: [...original.header, 'Untitled'],
-          data: original.data.map((item) => [...item, ''])
-        });
-        break;
-      case 'RENAME_HEADER':
-        stateTableData[1]({
-          ...original,
-          header: original.header.map((item, idx) => (
-            (idx - 1) === tableEvent.payload.index ? tableEvent.payload.value : item
-          ))
-        });
-        break;
-    }
-  }
+  const [activeIndex, setActiveIndex] = useState(-1);
 
   return (
     <>
       <div className={stylesCmn.editor}>
         <ProjectNameHeader />
-        <DataTabEditor tables={['table 1', 'table 2']} tableHeader={stateTableData[0].header.slice(1)} tableHeaderEventHandler={tableHeaderEventHandler} />
+        <DataTabEditor activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
       </div>
-      <div className={stylesCmn.view}>
-        <DataTabView stateTableData={stateTableData} />
+      <div className={`${stylesCmn.view} ${styles.view}`}>
+        <DataTabView activeIndex={activeIndex} />
       </div>
     </>
   );
