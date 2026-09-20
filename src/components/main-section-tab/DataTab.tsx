@@ -1,5 +1,4 @@
 import { useContext, useState, type Dispatch, type SetStateAction } from 'react';
-import TableEdit, { type TableData } from '../ui/TableEdit';
 import styles from './DataTab.module.css'
 import stylesCmn from './common.module.css'
 import { ProjectNameHeader } from './ProjectNameHeader';
@@ -206,10 +205,6 @@ function DataTabView({ activeIndex }: { activeIndex: number }) {
 
   if (!activeTable) return (<></>);
 
-  const tableData: TableData = {
-    header: ['Date', ...activeTable.header],
-    data: []
-  };
   const tableExData: TableExData = {
     header: ['Date', ...activeTable.header],
     data: []
@@ -244,13 +239,6 @@ function DataTabView({ activeIndex }: { activeIndex: number }) {
       }
     }
   }
-  for (let i = 0; i < activeTable.datetime.length; ++i) {
-    const row = [activeTable.datetime[i]];
-    activeTable.data[i].forEach((item) => {
-      row.push(item === null ? '' : String(item));
-    })
-    tableData.data.push(row);
-  }
 
   function setTableData(value: TableExData) {
     if (!projectData) return;
@@ -268,22 +256,6 @@ function DataTabView({ activeIndex }: { activeIndex: number }) {
     );
   }
 
-  /*
-  function setTableData(value: TableData) {
-    if (!projectData) return;
-    projectData.setValue(
-      projectData.value.map((item, index) => {
-        if (index != activeIndex) return item;
-        return {
-          ...item,
-          datetime: value.data.map((row) => row[0]),
-          data: value.data.map((row) => row.slice(1))
-        };
-      })
-    );
-  }
-    <TableEdit tableData={tableData} setTableData={setTableData} />
-  */
   return (
     <TableEditEx tableData={tableExData} setTableData={setTableData} />
   );
