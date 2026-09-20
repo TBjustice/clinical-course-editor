@@ -190,11 +190,9 @@ function TableRow({ row, rowIdx, activeCellState, tableEventFunction }: {
   );
 }
 
-export default function TableEditEx({ stateTableData }: { stateTableData: [TableExData, CallableFunction] }) {
+export default function TableEditEx({ tableData, setTableData }: { tableData: TableExData, setTableData: (value: TableExData) => void }) {
   const tableRef = useRef<HTMLTableElement>(null);
   const [activeCellState, setActiveCell] = useState<ActiveCellState>({ row: -1, col: -1, mode: 'FOCUS' });
-  const tableData = stateTableData[0];
-  const setTableData = stateTableData[1];
   const header = tableData.header;
   const data = tableData.data;
 
@@ -222,8 +220,13 @@ export default function TableEditEx({ stateTableData }: { stateTableData: [Table
   function onSetValue(newValue: string) {
     if (activeCellState.row == data.length) {
       const newData = [...tableData.data];
-      newData.push(Array(header.length).fill({prefix:'', value: '', suffix:'', isErr: false}));
-      newData[activeCellState.row][activeCellState.col].value = newValue;
+      newData.push(Array(header.length).fill(''));
+      newData[activeCellState.row][activeCellState.col] = {
+        isErr: false,
+        prefix: '',
+        suffix: '',
+        value: newValue
+      };
       setTableData({
         ...tableData,
         data: newData
@@ -235,8 +238,17 @@ export default function TableEditEx({ stateTableData }: { stateTableData: [Table
         data: tableData.data.map((colValue, row) => {
           if (row != activeCellState.row) return colValue;
           return colValue.map((value, col) => {
-            if (col != activeCellState.col) return value;
-            else return newValue;
+            if (col != activeCellState.col) {
+              return value;
+            }
+            else {
+              return {
+                isErr: false,
+                prefix: '',
+                suffix: '',
+                value: newValue
+              };
+            }
           });
         })
       });

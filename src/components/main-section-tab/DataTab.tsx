@@ -6,6 +6,8 @@ import { ProjectNameHeader } from './ProjectNameHeader';
 import { ProjectDataContext } from '../../contexts/ProjectContexts';
 import type { CliCTable } from '../../types/CliCTypes';
 import Dialog from '../ui/Dialog ';
+import TableEditEx, { type TableExData, type TableExItem } from '../ui/TableEditEx';
+import ParseDate from '../../scripts/ParseDate';
 
 function TableConfig({ table, setTable }: {
   table: CliCTable,
@@ -208,6 +210,40 @@ function DataTabView({ activeIndex }: { activeIndex: number }) {
     header: ['Date', ...activeTable.header],
     data: []
   };
+  const tableExData: TableExData = {
+    header: ['Date', ...activeTable.header],
+    data: []
+  }
+  if (activeTable.datetime.length != 0) {
+    const now = new Date();
+    let lastDate = {
+      y: now.getFullYear(),
+      m: now.getMonth() + 1,
+      d: now.getDate(),
+      added: ''
+    };
+    for (let i = 0; i < activeTable.datetime.length; ++i) {
+      const ymd = ParseDate(activeTable.datetime[i], lastDate.y, lastDate.m);
+      const row: TableExItem[] = [{
+        isErr: ymd === undefined,
+        prefix: ymd ? ymd.added : '',
+        value: String(activeTable.datetime[i]),
+        suffix: ''
+      }];
+      activeTable.data[i].forEach((item) => {
+        row.push({
+          isErr: false,
+          prefix: '',
+          value: item === null ? '' : String(item),
+          suffix: ''
+        });
+      })
+      tableExData.data.push(row);
+      if (ymd) {
+        lastDate = ymd;
+      }
+    }
+  }
   for (let i = 0; i < activeTable.datetime.length; ++i) {
     const row = [activeTable.datetime[i]];
     activeTable.data[i].forEach((item) => {
@@ -216,6 +252,23 @@ function DataTabView({ activeIndex }: { activeIndex: number }) {
     tableData.data.push(row);
   }
 
+  function setTableData(value: TableExData) {
+    if (!projectData) return;
+    projectData.setValue(
+      projectData.value.map((item, index) => {
+        if (index != activeIndex) return item;
+        return {
+          ...item,
+          datetime: value.data.map((row) => row[0].value),
+          data: value.data.map((row) => {
+            return row.slice(1).map((item) => item.value);
+          })
+        };
+      })
+    );
+  }
+
+  /*
   function setTableData(value: TableData) {
     if (!projectData) return;
     projectData.setValue(
@@ -229,9 +282,10 @@ function DataTabView({ activeIndex }: { activeIndex: number }) {
       })
     );
   }
-
-  return (
     <TableEdit tableData={tableData} setTableData={setTableData} />
+  */
+  return (
+    <TableEditEx tableData={tableExData} setTableData={setTableData} />
   );
 }
 
