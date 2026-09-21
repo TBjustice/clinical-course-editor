@@ -44,7 +44,7 @@ function TableConfig({ table, setTable }: {
     <section className={stylesCmn.editor_section}>
       <header className={styles.table_name}>
         <input
-          type="text" value={table.name}
+          type="text" value={table.name} name='table_name'
           onChange={(event) => {
             renameTable(event.target.value)
           }} />

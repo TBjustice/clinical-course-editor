@@ -49,6 +49,7 @@ function ActiveCell({ item, mode, tableEventFunction }: {
     case 'EDIT':
       return (
         <input
+          type='text'
           value={item.value}
           name='table-input'
           onKeyDown={(event) => {
@@ -82,6 +83,7 @@ function ActiveCell({ item, mode, tableEventFunction }: {
     case 'INPUT':
       return (
         <input
+          type='text'
           value={item.value}
           name='table-input'
           onKeyDown={(event) => {
@@ -114,6 +116,7 @@ function ActiveCell({ item, mode, tableEventFunction }: {
         <div className={styles.active_cell}>
           <span>{item.value}</span>
           <input
+            type='text'
             value={''}
             name='table-input'
             onKeyDown={(event) => {

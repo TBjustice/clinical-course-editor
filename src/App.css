@@ -41,6 +41,11 @@ select {
   }
 }
 
+input, textarea {
+  background: var(--bg);
+  color: var(--text-h);
+}
+
 .has-tooltip {
   position: relative;
 }
