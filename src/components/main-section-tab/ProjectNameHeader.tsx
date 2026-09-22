@@ -2,6 +2,7 @@ import styles from './ProjectNameHeader.module.css'
 import { SidebarOpenContext } from '../../contexts/AppContexts';
 import { useContext, useState } from 'react';
 import Dialog from '../ui/Dialog ';
+import { IconButtonOutline } from '../ui/IconButton';
 
 export function ProjectNameHeader({ }: {}) {
   const sidebarOpen = useContext(SidebarOpenContext);
@@ -26,20 +27,18 @@ export function ProjectNameHeader({ }: {}) {
         Untitled Project
       </div>
       <menu className={styles.header_menu}>
-        <button
-          className='has-tooltip'
+        <IconButtonOutline
+          icon_name='edit'
           onClick={() => { setRenameDialogOpen(true); }}>
-          <span className='material-icons-outlined'>edit</span>
           <div className='tooltip-right tooltip lang-en'>Rename Project</div>
           <div className='tooltip-right tooltip lang-jp'>プロジェクト名の変更</div>
-        </button>
-        <button
-          className='has-tooltip'
+        </IconButtonOutline>
+        <IconButtonOutline
+          icon_name='save_as'
           onClick={() => { setSaveAsDialogOpen(true); }}>
-          <span className='material-icons-outlined'>save_as</span>
           <div className='tooltip-right tooltip lang-en'>Save As</div>
           <div className='tooltip-right tooltip lang-jp'>名前を付けて保存</div>
-        </button>
+        </IconButtonOutline>
       </menu>
 
       <Dialog

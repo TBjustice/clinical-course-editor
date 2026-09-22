@@ -7,6 +7,7 @@ import type { CliCTable } from '../../types/CliCTypes';
 import Dialog from '../ui/Dialog ';
 import TableEditEx, { type TableExData, type TableExItem } from '../ui/TableEditEx';
 import ParseDate from '../../scripts/ParseDate';
+import { IconButtonOutline } from '../ui/IconButton';
 
 function TableConfig({ table, setTable }: {
   table: CliCTable,
@@ -58,16 +59,15 @@ function TableConfig({ table, setTable }: {
             <section key={idx}>
               <header className={styles.header_edit_name}>
                 <div className={styles.header_name}>{value}</div>
-                <button
-                  className={`${styles.icon_button} has-tooltip`}
+                <IconButtonOutline
+                  icon_name='edit'
                   onClick={() => {
                     setTempText(value);
                     setRenameDialogIndex(idx);
                   }}>
-                  <span className="material-icons-outlined">edit</span>
                   <div className="tooltip-left tooltip lang-en">Rename Column</div>
                   <div className="tooltip-left tooltip lang-jp">行の名前を変更</div>
-                </button>
+                </IconButtonOutline>
                 <button className={styles.delete_button}>
                   <span className="material-icons-outlined">delete_forever</span>
                 </button>
@@ -181,12 +181,9 @@ function DataTabEditor({ activeIndex, setActiveIndex }: { activeIndex: number, s
             </button>
           ))}
         </div>
-        <button
-          className={`${styles.add_button} has-tooltip`}
-          onClick={addTable}>
-          <span className={`material-icons-outlined`}>add</span>
-          <span className='tooltip tooltip-right lang-en'>Add new table</span>
-          <span className='tooltip tooltip-right lang-jp'>テーブルを追加</span>
+        <button className={styles.add_button} onClick={addTable}>
+          <span className='lang-en'>Add New Table</span>
+          <span className='lang-jp'>テーブルを追加</span>
         </button>
       </section>
       {activeTable && (
@@ -261,17 +258,16 @@ function DataTabView({ activeIndex }: { activeIndex: number }) {
   );
 }
 
-export function DataTab() {
-  const [activeIndex, setActiveIndex] = useState(-1);
+export function DataTab({ stateActiveIndex }: { stateActiveIndex: [number, Dispatch<SetStateAction<number>>] }) {
 
   return (
     <>
       <div className={stylesCmn.editor}>
         <ProjectNameHeader />
-        <DataTabEditor activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
+        <DataTabEditor activeIndex={stateActiveIndex[0]} setActiveIndex={stateActiveIndex[1]} />
       </div>
       <div className={`${stylesCmn.view} ${styles.view}`}>
-        <DataTabView activeIndex={activeIndex} />
+        <DataTabView activeIndex={stateActiveIndex[0]} />
       </div>
     </>
   );

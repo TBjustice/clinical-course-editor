@@ -51,9 +51,11 @@ export function PlotTabView({ ccgraph }: { ccgraph: CCGraph }) {
   }
 
   return (
-    <SvgAutoViewbox padding={2}>
-      <TvgToSvg tvg={tvg} />
-    </SvgAutoViewbox>
+    <>
+      <SvgAutoViewbox padding={2}>
+        <TvgToSvg tvg={tvg} />
+      </SvgAutoViewbox>
+    </>
   )
 }
 

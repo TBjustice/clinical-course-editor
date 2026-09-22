@@ -23,14 +23,17 @@
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border);
 
+  &:last-child {
+    border-bottom: none;
+  }
+
   header {
     font-size: 1.2rem;
-    margin-bottom: 0.5rem;
+    margin: 0.5rem;
   }
 
   select {
     font-size: 1rem;
-    outline: none;
     height: 2rem;
     min-width: 10rem;
   }
@@ -52,6 +55,43 @@
     width: 100%;
     min-height: 10rem;
     resize: none;
+  }
+}
+
+.graph_list{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.graph_config {
+  background-color: var(--surface);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.graph_menu {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+
+  .type_select {
+    margin-right: auto;
+  }
+}
+
+.add_graph {
+  height: 2rem;
+  border: 2px dashed var(--border);
+  color: var(--text-h);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover{
+    background-color: var(--surface2);
   }
 }
 
@@ -84,7 +124,7 @@
     background-color: var(--accent);
     color: var(--on-accent);
 
-    &:hover{
+    &:hover {
       background-color: var(--accent1);
     }
 
@@ -93,13 +133,13 @@
     }
   }
 
-  .series_add{
+  .series_add {
     width: 1.6rem;
     height: 1.6rem;
     border-radius: 0.8rem;
     color: var(--text-h);
-    
-    &:hover{
+
+    &:hover {
       background-color: var(--surface2);
     }
   }

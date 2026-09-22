@@ -57,12 +57,9 @@ export default function GraphLayerList({ items, activeUuid, dispatch }: { items:
   return (
     <>
       <ListContainer items={items} activeUuid={activeUuid} dispatch={dispatch} onSortEnd={onSortEnd} useDragHandle />
-      <button
-        className={`${styles.add_button} has-tooltip`}
-        onClick={addGraph}>
-        <span className={`material-icons-outlined`}>add</span>
-        <span className='tooltip tooltip-right lang-en'>Add new layer</span>
-        <span className='tooltip tooltip-right lang-jp'>レイヤーを追加</span>
+      <button className={styles.add_button} onClick={addGraph}>
+        <span className='lang-en'>Add New Layer</span>
+        <span className='lang-jp'>レイヤーを追加</span>
       </button>
     </>
   );

@@ -9,8 +9,8 @@ export type CCPlotParameterNumber = {
   step?: number
 }
 
-export type CCPlotParameterOption = {
-  type: 'option',
+export type CCPlotParameterSelect = {
+  type: 'select',
   name: string,
   hasDefault: boolean,
   initial: number,
@@ -25,7 +25,7 @@ export type CCPlotParameterGroup = {
 
 export type CCPlotGraphParameter =
   | CCPlotParameterNumber
-  | CCPlotParameterOption
+  | CCPlotParameterSelect
   | CCPlotParameterGroup;
 
 export type CCPlotGraphType = {

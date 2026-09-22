@@ -36,22 +36,5 @@
     align-items: center;
     margin: 0;
     padding: 0;
-
-    button {
-      width: 2rem;
-      height: 2rem;
-      border-radius: 0.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      &:hover {
-        background-color: var(--surface2);
-      }
-
-      span {
-        color: var(--text);
-      }
-    }
   }
 }
