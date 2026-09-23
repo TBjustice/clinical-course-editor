@@ -223,7 +223,12 @@ export default function TableEditEx({ tableData, setTableData }: { tableData: Ta
   function onSetValue(newValue: string) {
     if (activeCellState.row == data.length) {
       const newData = [...tableData.data];
-      newData.push(Array(header.length).fill(''));
+      newData.push(Array(header.length).fill({
+        isErr: false,
+        prefix: '',
+        suffix: '',
+        value: ''
+      }));
       newData[activeCellState.row][activeCellState.col] = {
         isErr: false,
         prefix: '',

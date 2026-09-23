@@ -14,11 +14,10 @@ export default function MainSection({ activeTab, ccgraph, activeUuid, dispatch }
   dispatch: CallableFunction
 }) {
   const [dataList, setDataList] = useState<CliCTable[]>(SAMPLE1.dataList);
-  const stateActiveDataIndex = useState<number>(-1);
   return (
     <ProjectDataContext value={{ value: dataList, setValue: setDataList }}>
       <section className={styles.main}>
-        {(activeTab == 'data') && <DataTab stateActiveIndex={stateActiveDataIndex} />}
+        {(activeTab == 'data') && <DataTab />}
         {(activeTab == 'plot') && <PlotTab ccgraph={ccgraph} activeUuid={activeUuid} dispatch={dispatch} />}
         {(activeTab == 'export') && (
           <div className={styles.placeholder}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import stylesCmn from './common.module.css'
 import styles from './PlotTab.module.css'
 import {
@@ -6,6 +6,7 @@ import {
   SortableElement,
   SortableHandle,
 } from '@lumel/react-sortable-hoc';
+import { ProjectCliCLayerContext } from '../../contexts/ProjectContexts';
 
 type GraphLayerItemProp = {
   uuid: string,
@@ -13,7 +14,6 @@ type GraphLayerItemProp = {
 }
 
 export default function GraphLayerList({ items, activeUuid, dispatch }: { items: GraphLayerItemProp[], activeUuid: string, dispatch: CallableFunction }) {
-
   const DragHandle = SortableHandle(React.forwardRef(({ }, ref: React.Ref<HTMLSpanElement> | undefined) => (
     <span ref={ref} className={`material-icons-outlined ${styles.layer_item_drag}`}>drag_indicator</span>
   )));

@@ -1,13 +1,13 @@
-import { useContext, useState, type Dispatch, type SetStateAction } from 'react';
+import { useState } from 'react';
 import styles from './DataTab.module.css'
 import stylesCmn from './common.module.css'
 import { ProjectNameHeader } from './ProjectNameHeader';
-import { ProjectDataContext } from '../../contexts/ProjectContexts';
 import type { CliCTable } from '../../types/CliCTypes';
 import Dialog from '../ui/Dialog ';
 import TableEditEx, { type TableExData, type TableExItem } from '../ui/TableEditEx';
 import ParseDate from '../../scripts/ParseDate';
 import { IconButtonOutline } from '../ui/IconButton';
+import { useProjectDataStore } from '../../stores/ProjectDataStore';
 
 function TableConfig({ table, setTable }: {
   table: CliCTable,
@@ -131,37 +131,15 @@ function TableConfig({ table, setTable }: {
   )
 }
 
-function DataTabEditor({ activeIndex, setActiveIndex }: { activeIndex: number, setActiveIndex: Dispatch<SetStateAction<number>> }) {
-  const projectData = useContext(ProjectDataContext);
-  if (!projectData) {
-    throw new Error('ProjectData must be used within a provider');
-  }
+function DataTabEditor() {
+  const tableList = useProjectDataStore((state) => state.tableList);
+  const activeTableIndex = useProjectDataStore((state) => state.activeTableIndex);
+  const setActiveTableIndex = useProjectDataStore((state) => state.setActiveTableIndex);
+  const updateActiveTable = useProjectDataStore((state) => state.updateActiveTable);
+  const addTable = useProjectDataStore((state)=>state.addTable);
 
-  const tables = projectData.value.map((item) => item.name);
-  const activeTable = activeIndex < 0 ? undefined : projectData.value[activeIndex];
-
-  function addTable() {
-    if (!projectData) return;
-    projectData.setValue([
-      ...projectData.value,
-      {
-        name: 'Untitled Table',
-        header: [],
-        datetime: [],
-        data: []
-      }
-    ]);
-  }
-
-  function updateActiveTable(table: CliCTable) {
-    if (!projectData) return;
-    projectData.setValue(projectData.value.map((item, index) => {
-      if (index == activeIndex) {
-        return table;
-      }
-      return item;
-    }))
-  }
+  const tables = tableList.map((item) => item.name);
+  const activeTable = activeTableIndex < 0 ? undefined : tableList[activeTableIndex];
 
   return (
     <div className={stylesCmn.list_and_editor}>
@@ -174,8 +152,8 @@ function DataTabEditor({ activeIndex, setActiveIndex }: { activeIndex: number, s
           {tables.map((item, index) => (
             <button
               key={index}
-              className={`${stylesCmn.list_item} ${styles.list_item} ${activeIndex === index ? 'active' : ''}`}
-              onClick={() => { setActiveIndex(index); }}>
+              className={`${stylesCmn.list_item} ${styles.list_item} ${activeTableIndex === index ? 'active' : ''}`}
+              onClick={() => { setActiveTableIndex(index); }}>
               <span className={`material-icons-outlined icon`}>border_all</span>
               <span>{item}</span>
             </button>
@@ -193,12 +171,11 @@ function DataTabEditor({ activeIndex, setActiveIndex }: { activeIndex: number, s
   );
 }
 
-function DataTabView({ activeIndex }: { activeIndex: number }) {
-  const projectData = useContext(ProjectDataContext);
-  if (!projectData) {
-    throw new Error('ProjectData must be used within a provider');
-  }
-  const activeTable = activeIndex < 0 ? undefined : projectData.value[activeIndex];
+function DataTabView() {
+  const activeTableIndex = useProjectDataStore((state) => state.activeTableIndex);
+  const updateActiveTable = useProjectDataStore((state) => state.updateActiveTable);
+
+  const activeTable = useProjectDataStore((state) => (activeTableIndex < 0 ? undefined : state.tableList[activeTableIndex]));
 
   if (!activeTable) return (<></>);
 
@@ -238,19 +215,15 @@ function DataTabView({ activeIndex }: { activeIndex: number }) {
   }
 
   function setTableData(value: TableExData) {
-    if (!projectData) return;
-    projectData.setValue(
-      projectData.value.map((item, index) => {
-        if (index != activeIndex) return item;
-        return {
-          ...item,
-          datetime: value.data.map((row) => row[0].value),
-          data: value.data.map((row) => {
-            return row.slice(1).map((item) => item.value);
-          })
-        };
-      })
-    );
+    if (activeTable) {
+      updateActiveTable({
+        ...activeTable,
+        datetime: value.data.map((row) => row[0].value),
+        data: value.data.map((row) => {
+          return row.slice(1).map((item) => item.value);
+        })
+      });
+    }
   }
 
   return (
@@ -258,16 +231,16 @@ function DataTabView({ activeIndex }: { activeIndex: number }) {
   );
 }
 
-export function DataTab({ stateActiveIndex }: { stateActiveIndex: [number, Dispatch<SetStateAction<number>>] }) {
+export function DataTab() {
 
   return (
     <>
       <div className={stylesCmn.editor}>
         <ProjectNameHeader />
-        <DataTabEditor activeIndex={stateActiveIndex[0]} setActiveIndex={stateActiveIndex[1]} />
+        <DataTabEditor />
       </div>
       <div className={`${stylesCmn.view} ${styles.view}`}>
-        <DataTabView activeIndex={stateActiveIndex[0]} />
+        <DataTabView />
       </div>
     </>
   );

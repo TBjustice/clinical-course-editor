@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "plugin":"npx esbuild ./src/scripts/plugin/main.ts --bundle --format=iife --global-name=CliCPlotPlugin --outfile=public/plugin/main.js",
+    "plugin": "npx esbuild ./src/scripts/plugin/main.ts --bundle --format=iife --global-name=CliCPlotPlugin --outfile=public/plugin/main.js",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
@@ -19,7 +19,8 @@
     "material-icons": "^1.13.14",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "zod": "^4.5.4"
+    "zod": "^4.5.4",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
