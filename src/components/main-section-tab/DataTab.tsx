@@ -17,6 +17,9 @@ function TableConfig({ table, setTable }: {
   const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
   const [tempText, setTempText] = useState('');
 
+  const [deleteTableDialogOpen, setDeleteTableDialogOpen] = useState(false);
+  const deleteActiveTable = useProjectDataStore((state) => state.deleteActiveTable);
+
   function renameTable(newName: string) {
     setTable({
       ...table,
@@ -49,7 +52,9 @@ function TableConfig({ table, setTable }: {
           onChange={(event) => {
             renameTable(event.target.value)
           }} />
-        <button className={styles.delete_button}>
+        <button
+          className={styles.delete_button}
+          onClick={() => { setDeleteTableDialogOpen(true); }}>
           <span className="material-icons-outlined">delete_forever</span>
         </button>
       </header>
@@ -68,9 +73,6 @@ function TableConfig({ table, setTable }: {
                   <div className="tooltip-left tooltip lang-en">Rename Column</div>
                   <div className="tooltip-left tooltip lang-jp">行の名前を変更</div>
                 </IconButtonOutline>
-                <button className={styles.delete_button}>
-                  <span className="material-icons-outlined">delete_forever</span>
-                </button>
               </header>
             </section>
           );
@@ -127,6 +129,31 @@ function TableConfig({ table, setTable }: {
           </button>
         </menu>
       </Dialog>
+      <Dialog
+        isOpen={deleteTableDialogOpen}
+        onCancelDialog={() => {
+          setDeleteTableDialogOpen(false);
+        }}>
+        <header>
+          <span className='lang-en'>Do you really want to delete this table?</span>
+          <span className='lang-jp'>本当にこのテーブルを削除しても良いですか?</span>
+        </header>
+        <p>
+          <span className='lang-en'>All the content are deleted permanently.</span>
+          <span className='lang-jp'>内容は完全に消去されます。</span>
+        </p>
+        <menu>
+          <button
+            onClick={() => {
+              setDeleteTableDialogOpen(false);
+            }}>Cancel</button>
+          <button
+            onClick={() => {
+              setDeleteTableDialogOpen(false);
+              deleteActiveTable();
+            }}>Yes</button>
+        </menu>
+      </Dialog >
     </section>
   )
 }
@@ -136,7 +163,7 @@ function DataTabEditor() {
   const activeTableIndex = useProjectDataStore((state) => state.activeTableIndex);
   const setActiveTableIndex = useProjectDataStore((state) => state.setActiveTableIndex);
   const updateActiveTable = useProjectDataStore((state) => state.updateActiveTable);
-  const addTable = useProjectDataStore((state)=>state.addTable);
+  const addTable = useProjectDataStore((state) => state.addTable);
 
   const tables = tableList.map((item) => item.name);
   const activeTable = activeTableIndex < 0 ? undefined : tableList[activeTableIndex];

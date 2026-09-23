@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import stylesCmn from './common.module.css'
 import styles from './PlotTab.module.css'
 import {
@@ -6,25 +6,39 @@ import {
   SortableElement,
   SortableHandle,
 } from '@lumel/react-sortable-hoc';
-import { ProjectCliCLayerContext } from '../../contexts/ProjectContexts';
+import { useProjectDataStore } from '../../stores/ProjectDataStore';
 
 type GraphLayerItemProp = {
   uuid: string,
   name: string
 }
 
-export default function GraphLayerList({ items, activeUuid, dispatch }: { items: GraphLayerItemProp[], activeUuid: string, dispatch: CallableFunction }) {
+export default function GraphLayerList() {
+  const setActiveLayerUuid = useProjectDataStore((state) => state.setActiveLayerUuid);
+  const layerUuid = useProjectDataStore((state) => state.layerUuid);
+  const layerList = useProjectDataStore((state) => state.layerList);
+  const activeLayerUuid = useProjectDataStore((state) => state.activeLayerUuid);
+  const addLayer = useProjectDataStore((state) => state.addLayer);
+  const moveLayer = useProjectDataStore((state) => state.moveLayer);
+
+  const layerItemList: GraphLayerItemProp[] = [];
+  for (const uuid of layerUuid) {
+    layerItemList.push({
+      uuid, name: layerList[uuid].name
+    })
+  }
+
   const DragHandle = SortableHandle(React.forwardRef(({ }, ref: React.Ref<HTMLSpanElement> | undefined) => (
     <span ref={ref} className={`material-icons-outlined ${styles.layer_item_drag}`}>drag_indicator</span>
   )));
 
-  const ListItem = SortableElement<{ value: GraphLayerItemProp, isActive: boolean, dispatch: CallableFunction }>(
-    React.forwardRef(({ value, isActive, dispatch }: { value: GraphLayerItemProp, isActive: boolean, dispatch: CallableFunction }, ref: React.Ref<HTMLButtonElement> | undefined) => (
+  const ListItem = SortableElement<{ value: GraphLayerItemProp, isActive: boolean }>(
+    React.forwardRef(({ value, isActive }: { value: GraphLayerItemProp, isActive: boolean }, ref: React.Ref<HTMLButtonElement> | undefined) => (
       <button
         ref={ref}
         className={isActive ? `${stylesCmn.list_item} ${styles.list_item} active` : `${stylesCmn.list_item} ${styles.list_item}`}
         onClick={() => {
-          dispatch({ type: 'SELECT_ITEM', payload: value.uuid });
+          setActiveLayerUuid(value.uuid)
         }}>
         <DragHandle />
         <span className={styles.layer_item_name}>{value.name}</span>
@@ -32,32 +46,24 @@ export default function GraphLayerList({ items, activeUuid, dispatch }: { items:
     )),
   );
 
-  const ListContainer = SortableContainer<{ items: GraphLayerItemProp[], activeUuid: String, dispatch: CallableFunction }>(
-    React.forwardRef(({ items }: { items: GraphLayerItemProp[] }, ref: React.Ref<HTMLDivElement> | undefined) => (
+  const ListContainer = SortableContainer(
+    React.forwardRef(({ }, ref: React.Ref<HTMLDivElement> | undefined) => (
       <div ref={ref}>
-        {items.map((value, index) => (
-          <ListItem key={value.uuid} index={index} isActive={value.uuid == activeUuid} value={value} dispatch={dispatch} />
+        {layerItemList.map((value, index) => (
+          <ListItem key={value.uuid} index={index} isActive={value.uuid == activeLayerUuid} value={value} />
         ))}
       </div>
     )),
   );
 
-  const onSortEnd = (
-    { oldIndex, newIndex }: { oldIndex: number, newIndex: number }) => {
-    dispatch({ type: 'LIST_MOVE_ITEM', payload: { oldIndex, newIndex } });
+  const onSortEnd = ( { oldIndex, newIndex }: { oldIndex: number, newIndex: number }) => {
+    moveLayer(oldIndex, newIndex);
   };
-
-  function addGraph() {
-    dispatch({
-      type: 'ADD_ITEM',
-      payload: crypto.randomUUID()
-    });
-  }
 
   return (
     <>
-      <ListContainer items={items} activeUuid={activeUuid} dispatch={dispatch} onSortEnd={onSortEnd} useDragHandle />
-      <button className={styles.add_button} onClick={addGraph}>
+      <ListContainer onSortEnd={onSortEnd} useDragHandle />
+      <button className={styles.add_button} onClick={() => { addLayer(crypto.randomUUID()); }}>
         <span className='lang-en'>Add New Layer</span>
         <span className='lang-jp'>レイヤーを追加</span>
       </button>

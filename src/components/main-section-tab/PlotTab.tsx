@@ -14,12 +14,6 @@ export function PlotTabEditor({ ccgraph, activeUuid, dispatch }: {
   activeUuid: string,
   dispatch: CallableFunction
 }) {
-
-  const ccgraphListProp = ccgraph.uuidList.map(uuid => ({
-    uuid,
-    name: ccgraph.ccgraphItems[uuid].name
-  }));
-
   return (
     <div className={stylesCmn.list_and_editor}>
       <section className={stylesCmn.list_section}>
@@ -27,7 +21,7 @@ export function PlotTabEditor({ ccgraph, activeUuid, dispatch }: {
           <span className='lang-en'>Graph Layer</span>
           <span className='lang-jp'>グラフレイヤー</span>
         </header>
-        <GraphLayerList items={ccgraphListProp} activeUuid={activeUuid} dispatch={dispatch} />
+        <GraphLayerList />
       </section>
       <section className={`${stylesCmn.editor_section} ${styles.editor}`}>
         {activeUuid.length > 0 && (
