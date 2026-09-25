@@ -31,7 +31,7 @@ function TableConfig({ table, setTable }: {
     setTable({
       ...table,
       header: table.header.map((item, i) => {
-        return i == index ? newName : item;
+        return i == index ? { ...item, name: newName } : item;
       })
     });
   }
@@ -39,7 +39,7 @@ function TableConfig({ table, setTable }: {
   function addHeader(newName: string) {
     setTable({
       ...table,
-      header: [...table.header, newName],
+      header: [...table.header, { uuid: crypto.randomUUID(), name: newName }],
       data: table.data.map((item) => [...item, null])
     });
   }
@@ -63,11 +63,11 @@ function TableConfig({ table, setTable }: {
           return (
             <section key={idx}>
               <header className={styles.header_edit_name}>
-                <div className={styles.header_name}>{value}</div>
+                <div className={styles.header_name}>{value.name}</div>
                 <IconButtonOutline
                   icon_name='edit'
                   onClick={() => {
-                    setTempText(value);
+                    setTempText(value.name);
                     setRenameDialogIndex(idx);
                   }}>
                   <div className="tooltip-left tooltip lang-en">Rename Column</div>
@@ -207,7 +207,7 @@ function DataTabView() {
   if (!activeTable) return (<></>);
 
   const tableExData: TableExData = {
-    header: ['Date', ...activeTable.header],
+    header: ['Date', ...activeTable.header.map((item) => item.name)],
     data: []
   }
   if (activeTable.datetime.length != 0) {

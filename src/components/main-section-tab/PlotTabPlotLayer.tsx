@@ -13,7 +13,7 @@ type GraphLayerItemProp = {
   name: string
 }
 
-export default function GraphLayerList() {
+export default function PlotLayerList() {
   const setActiveLayerUuid = useProjectDataStore((state) => state.setActiveLayerUuid);
   const layerUuid = useProjectDataStore((state) => state.layerUuid);
   const layerList = useProjectDataStore((state) => state.layerList);

@@ -1,13 +1,20 @@
 import * as z from "zod";
 
+export const CliCTableHeaderSchema = z.object({
+  uuid: z.string(),
+  name: z.string()
+});
+
+export type CliCTableHeader = z.infer<typeof CliCTableHeaderSchema>;
+
 export const CliCTableSchema = z.object({
   name: z.string(),
-  header: z.array(z.string()),
+  header: z.array(CliCTableHeaderSchema),
   datetime: z.array(z.string()),
   data: z.array(z.array(z.union([z.string(), z.number(), z.null()])))
 }).superRefine((val, ctx) => {
   const headerLength = val.header.length;
-  const keyLength = val.datetime.length;
+  const datetimeLength = val.datetime.length;
   if (val.data.length != headerLength) {
     ctx.addIssue({
       code: 'custom',
@@ -15,10 +22,10 @@ export const CliCTableSchema = z.object({
     });
   }
   val.data.forEach((row, index) => {
-    if (row.length != keyLength) {
+    if (row.length != datetimeLength) {
       ctx.addIssue({
         code: 'custom',
-        message: `Row at data[${index}] must have same length as key size(${keyLength}).`
+        message: `Row at data[${index}] must have same length as key size(${datetimeLength}).`
       });
     }
   });
@@ -31,6 +38,8 @@ export const CliCPlotSchema = z.object({
   target: z.array(z.string()),
   parameters: z.object()
 });
+
+export type CliCPlot = z.infer<typeof CliCPlotSchema>;
 
 export const CliCLayerSchema = z.object({
   name: z.string(),
@@ -49,7 +58,7 @@ export const CliCFigureSchema = z.object({
 export type CliCFigure = z.infer<typeof CliCFigureSchema>;
 
 export const CliCProjectSchema = z.object({
-  dataList: z.array(CliCTableSchema),
+  tableList: z.array(CliCTableSchema),
   figure: CliCFigureSchema
 });
 

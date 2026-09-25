@@ -13,11 +13,13 @@ type ProjectState = {
   setLayerUuid: (value: string[]) => void;
   setActiveTableIndex: (index: number) => void;
   setActiveLayerUuid: (uuid: string) => void;
-  updateActiveTable: (value: CliCTable) => void;
   addTable: () => void;
+  updateActiveTable: (value: CliCTable) => void;
   deleteActiveTable: () => void;
   moveLayer: (oldIndex: number, newIndex: number) => void;
   addLayer: (uuid: string) => void;
+  updateActiveLayer: (value: CliCLayer) => void;
+  deleteActiveLayer: () => void;
 };
 
 export const useProjectDataStore = create<ProjectState>((set) => ({
@@ -31,14 +33,6 @@ export const useProjectDataStore = create<ProjectState>((set) => ({
   setLayerUuid: (value: string[]) => set({ layerUuid: value }),
   setActiveTableIndex: (index) => set({ activeTableIndex: index }),
   setActiveLayerUuid: (uuid) => set({ activeLayerUuid: uuid }),
-  updateActiveTable: (value: CliCTable) => set((state) => ({
-    tableList: state.tableList.map((item, index) => {
-      if (index == state.activeTableIndex) {
-        return value;
-      }
-      return item;
-    })
-  })),
   addTable: () => set((state) => ({
     activeTableIndex: state.tableList.length,
     tableList: [...state.tableList, {
@@ -47,6 +41,14 @@ export const useProjectDataStore = create<ProjectState>((set) => ({
       datetime: [],
       data: []
     }]
+  })),
+  updateActiveTable: (value: CliCTable) => set((state) => ({
+    tableList: state.tableList.map((item, index) => {
+      if (index == state.activeTableIndex) {
+        return value;
+      }
+      return item;
+    })
   })),
   deleteActiveTable: () => set((state) => ({
     activeTableIndex: -1,
@@ -68,5 +70,19 @@ export const useProjectDataStore = create<ProjectState>((set) => ({
   }),
   moveLayer: (oldIndex: number, newIndex: number) => set((state) => ({
     layerUuid: arrayMoveImmutable(state.layerUuid, oldIndex, newIndex)
-  }))
+  })),
+  updateActiveLayer: (value: CliCLayer) => set((state) => ({
+    layerList: {
+      ...state.layerList,
+      [state.activeLayerUuid]: value
+    }
+  })),
+  deleteActiveLayer: () => set((state) => {
+    const newData = { ...state.layerList };
+    delete newData[state.activeLayerUuid];
+    return {
+      layerList: newData,
+      layerUuid: state.layerUuid.filter(item => item !== state.activeLayerUuid)
+    }
+  })
 }));

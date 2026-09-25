@@ -1,7 +1,6 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css'
-import type { CCGraph, CCGraphItem } from './types/CCGraph.ts';
-import { arrayMoveImmutable } from 'array-move';
+import type { CCGraph } from './types/CCGraph.ts';
 import 'material-icons/iconfont/material-icons.css';
 import SidebarSection from './components/SidebarSection.tsx';
 import MainSection from './components/MainSection.tsx';
@@ -35,86 +34,8 @@ function loadCCGraph() {
   }
 }
 
-
-type AppStateAction =
-  | { type: 'ADD_ITEM'; payload: string }
-  | { type: 'SELECT_ITEM'; payload: string }
-  | { type: 'LIST_MOVE_ITEM'; payload: { oldIndex: number; newIndex: number } }
-  | { type: 'DELETE_DATA'; payload: string }
-  | { type: 'SET_ITEM'; payload: { uuid: string, ccgraphItem: CCGraphItem } };
-
-function AppStateReducer(state: AppState, action: AppStateAction) {
-  switch (action.type) {
-    case 'ADD_ITEM':
-      {
-        const newCCGraphItems = {
-          ...state.ccgraph.ccgraphItems,
-        };
-        newCCGraphItems[action.payload] = {
-          name: 'Untitled Graph',
-          type: '',
-          height: 30,
-          data: ''
-        };
-        return {
-          ...state,
-          ccgraph: {
-            ...state.ccgraph,
-            uuidList: [...state.ccgraph.uuidList, action.payload],
-            ccgraphItems: newCCGraphItems
-          }
-        }
-      }
-    case 'SELECT_ITEM':
-      return {
-        ...state,
-        activeUuid: action.payload
-      };
-    case 'LIST_MOVE_ITEM':
-      return {
-        ...state,
-        ccgraph: {
-          ...state.ccgraph,
-          uuidList: arrayMoveImmutable(state.ccgraph.uuidList, action.payload.oldIndex, action.payload.newIndex)
-        }
-      };
-    case 'DELETE_DATA':
-      {
-        const newCCGraphItems = {
-          ...state.ccgraph.ccgraphItems,
-        };
-        delete newCCGraphItems[action.payload];
-        return {
-          ...state,
-          activeUuid: (state.activeUuid === action.payload ? '' : state.activeUuid),
-          ccgraph: {
-            ...state.ccgraph,
-            uuidList: state.ccgraph.uuidList.filter(item => item !== action.payload),
-            ccgraphItems: newCCGraphItems
-          }
-        };
-      }
-    case 'SET_ITEM':
-      {
-        const newCCGraphItems = {
-          ...state.ccgraph.ccgraphItems,
-        };
-        newCCGraphItems[action.payload.uuid] = action.payload.ccgraphItem;
-        return {
-          ...state,
-          ccgraph: {
-            ...state.ccgraph,
-            ccgraphItems: newCCGraphItems
-          }
-        }
-      }
-    default:
-      return state;
-  }
-}
-
 export default function App() {
-  const [state, dispatch] = useReducer(AppStateReducer, { ccgraph: loadCCGraph(), activeUuid: '' });
+  const [appState, _setAppState] = useState<AppState>({ ccgraph: loadCCGraph(), activeUuid: '' });
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState('data');
   const setTableList = useProjectDataStore((state) => state.setTableList);
@@ -122,7 +43,7 @@ export default function App() {
   const setLayerList = useProjectDataStore((state) => state.setLayerList);
 
   useEffect(() => {
-    setTableList(SAMPLE1.dataList);
+    setTableList(SAMPLE1.tableList);
     const newLayerUuid: string[] = [];
     const newLayerList: Record<string, CliCLayer> = {};
     for (const layer of SAMPLE1.figure.layerList) {
@@ -135,7 +56,7 @@ export default function App() {
   }, []);
 
   window.addEventListener('beforeunload', () => {
-    window.localStorage.setItem('ccedit-appstate', JSON.stringify(state.ccgraph));
+    window.localStorage.setItem('ccedit-appstate', JSON.stringify(appState.ccgraph));
   });
 
   return (
@@ -143,7 +64,7 @@ export default function App() {
       <SidebarOpenContext
         value={{ value: sidebarOpen, setValue: setSidebarOpen }}>
         <SidebarSection activeTab={activeTab} setActiveTab={setActiveTab} />
-        <MainSection activeTab={activeTab} activeUuid={state.activeUuid} ccgraph={state.ccgraph} dispatch={dispatch} />
+        <MainSection activeTab={activeTab} ccgraph={appState.ccgraph} />
       </SidebarOpenContext>
     </>
   )

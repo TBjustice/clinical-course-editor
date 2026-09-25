@@ -1,4 +1,4 @@
-import GraphDataEditor from './PlotTabGraphDataEditor';
+import PlotLayerEditor from './PlotTabPlotLayerEditor';
 import type { CCGraph } from '../../types/CCGraph';
 import stylesCmn from './common.module.css'
 import styles from './PlotTab.module.css'
@@ -7,13 +7,11 @@ import { TvgToSvg } from '../ui/TvgToSvg';
 import { TvgElementSchema, type TvgElement } from '../../scripts/tiny-vector-graphics/TvgType';
 import z from 'zod';
 import { ProjectNameHeader } from './ProjectNameHeader';
-import GraphLayerList from './PlotTabGraphLayer';
+import PlotLayerList from './PlotTabPlotLayer';
+import { useProjectDataStore } from '../../stores/ProjectDataStore';
 
-export function PlotTabEditor({ ccgraph, activeUuid, dispatch }: {
-  ccgraph: CCGraph,
-  activeUuid: string,
-  dispatch: CallableFunction
-}) {
+export function PlotTabEditor() {
+  const activeLayer = useProjectDataStore((state) => (state.activeLayerUuid in state.layerList ? state.layerList[state.activeLayerUuid] : undefined));
   return (
     <div className={stylesCmn.list_and_editor}>
       <section className={stylesCmn.list_section}>
@@ -21,14 +19,11 @@ export function PlotTabEditor({ ccgraph, activeUuid, dispatch }: {
           <span className='lang-en'>Graph Layer</span>
           <span className='lang-jp'>グラフレイヤー</span>
         </header>
-        <GraphLayerList />
+        <PlotLayerList />
       </section>
       <section className={`${stylesCmn.editor_section} ${styles.editor}`}>
-        {activeUuid.length > 0 && (
-          <GraphDataEditor
-            uuid={activeUuid}
-            ccgraphItem={ccgraph.ccgraphItems[activeUuid]}
-            dispatch={dispatch} />
+        {activeLayer && (
+          <PlotLayerEditor activeLayer={activeLayer} />
         )}
       </section>
     </div>
@@ -53,16 +48,12 @@ export function PlotTabView({ ccgraph }: { ccgraph: CCGraph }) {
   )
 }
 
-export function PlotTab({ ccgraph, activeUuid, dispatch }: {
-  ccgraph: CCGraph,
-  activeUuid: string,
-  dispatch: CallableFunction
-}) {
+export function PlotTab({ ccgraph }: { ccgraph: CCGraph }) {
   return (
     <>
       <div className={stylesCmn.editor}>
         <ProjectNameHeader />
-        <PlotTabEditor ccgraph={ccgraph} activeUuid={activeUuid} dispatch={dispatch} />
+        <PlotTabEditor />
       </div>
       <div className={`${stylesCmn.view} ${styles.preview}`}>
         <PlotTabView ccgraph={ccgraph} />
