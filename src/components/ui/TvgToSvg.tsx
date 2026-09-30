@@ -134,11 +134,19 @@ export function TvgToSvg({ tvg }: { tvg: TvgType.TvgElement[] }) {
               >{item.text}</text >
             );
           case 'group':
-            return (
-              <g key={index}>
-                <TvgToSvg tvg={item.children} />
-              </g>
-            );
+            {
+              let transform: string|undefined = undefined;
+              if (item.transform) {
+                transform = `matrix(${item.transform[0]} ${item.transform[1]} ${item.transform[2]} ${item.transform[3]} ${item.transform[4]} ${item.transform[5]})`
+              }
+              return (
+                <g
+                  key={index}
+                  transform={transform}>
+                  <TvgToSvg tvg={item.children} />
+                </g>
+              );
+            }
           default:
             break;
         }

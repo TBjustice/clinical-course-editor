@@ -51,14 +51,14 @@ export type CliCLayer = z.infer<typeof CliCLayerSchema>;
 
 export const CliCFigureSchema = z.object({
   width: z.number(),
-  dateRange: z.array(z.string()).length(2),
-  layerList: z.array(CliCLayerSchema)
+  dateRange: z.array(z.string()).length(2)
 });
 
 export type CliCFigure = z.infer<typeof CliCFigureSchema>;
 
 export const CliCProjectSchema = z.object({
   tableList: z.array(CliCTableSchema),
+  layerList: z.array(CliCLayerSchema),
   figure: CliCFigureSchema
 });
 

@@ -113,8 +113,11 @@ function ActiveCell({ item, mode, tableEventFunction }: {
 
     case 'FOCUS':
       return (
-        <div className={styles.active_cell}>
-          <span>{item.value}</span>
+        <div className={styles.active_cell}><>
+          <span className={styles.prefix}>{item.prefix}</span>
+          <span className={item.isErr ? styles.error : ''}>{item.value}</span>
+          <span className={styles.suffix}>{item.suffix}</span>
+        </>
           <input
             type='text'
             value={''}

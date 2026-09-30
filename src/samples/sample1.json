@@ -226,7 +226,7 @@
           3.9
         ],
         [
-          15000,
+          8500,
           12,
           48,
           39,
@@ -279,6 +279,7 @@
       ],
       "datetime": [
         "2020/1/22",
+        "2020/2/1",
         "2020/2/7",
         "2020/2/15",
         "2020/2/25",
@@ -292,6 +293,9 @@
           150
         ],
         [
+          75
+        ],
+        [
           0
         ],
         [
@@ -303,68 +307,68 @@
       ]
     }
   ],
+  "layerList": [
+    {
+      "name": "G-CSF",
+      "plotList": [
+        {
+          "type": "step-area",
+          "target": [
+            "963f77a0-1fbe-4d4c-b45d-14502e963e0b"
+          ],
+          "parameters": {}
+        }
+      ],
+      "height": 30
+    },
+    {
+      "name": "WBC/Hb",
+      "plotList": [
+        {
+          "type": "line",
+          "target": [
+            "2861e722-772f-42b6-8eec-d29ed4378f21"
+          ],
+          "parameters": {}
+        },
+        {
+          "type": "line",
+          "target": [
+            "b4d6a989-b37a-4e63-b4ab-4c9a5653a3ec"
+          ],
+          "parameters": {}
+        }
+      ],
+      "height": 80
+    },
+    {
+      "name": "Lab Data",
+      "plotList": [
+        {
+          "type": "line",
+          "target": [
+            "58efd4b0-0584-4e55-a02f-e58a5d341004",
+            "ed49f3e7-470d-4661-8447-c7c89fd01b52"
+          ],
+          "parameters": {}
+        },
+        {
+          "type": "line",
+          "target": [
+            "b3ebc562-0da6-4271-a681-2f16dfbe2a9a"
+          ],
+          "parameters": {}
+        }
+      ],
+      "height": 80
+    }
+  ],
   "figure": {
     "width": 500,
     "date": {
       "base": "2020/01/10",
       "min": "2020/01/01",
       "max": "2020/03/10"
-    },
-    "layerList": [
-      {
-        "name": "G-CSF",
-        "plotList": [
-          {
-            "type": "step-area",
-            "target": [
-              "963f77a0-1fbe-4d4c-b45d-14502e963e0b"
-            ],
-            "parameters": {}
-          }
-        ],
-        "height": 30
-      },
-      {
-        "name": "WBC/Hb",
-        "plotList": [
-          {
-            "type": "line",
-            "target": [
-              "2861e722-772f-42b6-8eec-d29ed4378f21"
-            ],
-            "parameters": {}
-          },
-          {
-            "type": "line",
-            "target": [
-              "b4d6a989-b37a-4e63-b4ab-4c9a5653a3ec"
-            ],
-            "parameters": {}
-          }
-        ],
-        "height": 80
-      },
-      {
-        "name": "Lab Data",
-        "plotList": [
-          {
-            "type": "line",
-            "target": [
-              "58efd4b0-0584-4e55-a02f-e58a5d341004",
-              "ed49f3e7-470d-4661-8447-c7c89fd01b52"
-            ],
-            "parameters": {}
-          },
-          {
-            "type": "line",
-            "target": [
-              "b3ebc562-0da6-4271-a681-2f16dfbe2a9a"
-            ],
-            "parameters": {}
-          }
-        ],
-        "height": 80
-      }
-    ]
+    }
   }
 }

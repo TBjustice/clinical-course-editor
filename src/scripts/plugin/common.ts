@@ -17,20 +17,31 @@ export type CCPlotParameterSelect = {
   options: string[]
 }
 
-export type CCPlotParameterGroup = {
-  type: 'group',
-  name: string,
-  list: CCPlotGraphParameter[]
-}
-
 export type CCPlotGraphParameter =
   | CCPlotParameterNumber
-  | CCPlotParameterSelect
-  | CCPlotParameterGroup;
+  | CCPlotParameterSelect;
+
+export type CCPlotGraphData = {
+  name: string,
+  datetime: (Date | undefined)[],
+  value: string[]
+}
+
+export type CCPlotGraphArg = {
+  name: string,
+  height: number,
+  dataIndex: number,
+  data: CCPlotGraphData[]
+}
+
+export type CCPlotFigureArg = {
+  width: number,
+  dateRange: [Date, Date]
+}
 
 export type CCPlotGraphType = {
   name: string,
   parameters: CCPlotGraphParameter[],
   setDefault: CallableFunction,
-  render: (value: any) => TvgElement[]
+  render: (graphArg: CCPlotGraphArg, figureArg: CCPlotFigureArg) => TvgElement[]
 }

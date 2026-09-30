@@ -210,36 +210,36 @@ function DataTabView() {
     header: ['Date', ...activeTable.header.map((item) => item.name)],
     data: []
   }
-  if (activeTable.datetime.length != 0) {
-    const now = new Date();
-    let lastDate = {
-      y: now.getFullYear(),
-      m: now.getMonth() + 1,
-      d: now.getDate(),
-      added: ''
-    };
-    for (let i = 0; i < activeTable.datetime.length; ++i) {
-      const ymd = ParseDate(activeTable.datetime[i], lastDate.y, lastDate.m);
-      const row: TableExItem[] = [{
-        isErr: ymd === undefined,
-        prefix: ymd ? ymd.added : '',
-        value: String(activeTable.datetime[i]),
+
+  const now = new Date();
+  let lastDate = {
+    y: now.getFullYear(),
+    m: now.getMonth() + 1,
+    d: now.getDate(),
+    added: ''
+  };
+  for (let i = 0; i < activeTable.datetime.length; ++i) {
+    const ymd = ParseDate(activeTable.datetime[i], lastDate.y, lastDate.m);
+    const row: TableExItem[] = [{
+      isErr: ymd === undefined,
+      prefix: ymd ? ymd.added : '',
+      value: String(activeTable.datetime[i]),
+      suffix: ''
+    }];
+    activeTable.data[i].forEach((item) => {
+      row.push({
+        isErr: false,
+        prefix: '',
+        value: item === null ? '' : String(item),
         suffix: ''
-      }];
-      activeTable.data[i].forEach((item) => {
-        row.push({
-          isErr: false,
-          prefix: '',
-          value: item === null ? '' : String(item),
-          suffix: ''
-        });
-      })
-      tableExData.data.push(row);
-      if (ymd) {
-        lastDate = ymd;
-      }
+      });
+    })
+    tableExData.data.push(row);
+    if (ymd) {
+      lastDate = ymd;
     }
   }
+
 
   function setTableData(value: TableExData) {
     if (activeTable) {
