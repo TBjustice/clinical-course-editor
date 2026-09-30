@@ -21,19 +21,27 @@ var CliCPlotPlugin = (() => {
   var main_exports = {};
   __export(main_exports, {
     addGraphType: () => addGraphType,
+    getGraphTypes: () => getGraphTypes,
+    removeGraphType: () => removeGraphType,
     renderGraph: () => renderGraph
   });
   var graphTypeList = {};
-  function renderGraph(name, value) {
+  function getGraphTypes() {
+    return Object.keys(graphTypeList);
+  }
+  function renderGraph(name, arg) {
     if (name in graphTypeList) {
       const graphType = graphTypeList[name];
-      return graphType.render(value);
+      return graphType.render(arg);
     } else {
       return [];
     }
   }
   function addGraphType(graphType) {
     graphTypeList[graphType.name] = graphType;
+  }
+  function removeGraphType(name) {
+    delete graphTypeList[name];
   }
   return __toCommonJS(main_exports);
 })();
